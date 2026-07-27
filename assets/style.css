@@ -531,13 +531,6 @@ main > .section:last-child {
   letter-spacing: -0.018em;
 }
 
-.page-head__dek {
-  margin-top: var(--sp-4);
-  color: var(--text-dim);
-  font-size: var(--fs-ui);
-  max-width: 52ch;
-}
-
 /* --- Reading progress ----------------------------------------------------- */
 
 .progress {
