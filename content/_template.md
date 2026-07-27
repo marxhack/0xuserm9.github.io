@@ -6,7 +6,7 @@ tags: []
 draft: true
 ---
 
-Opening paragraph. No heading above it — the title is already the h1.
+Opening paragraph. No heading above it, the title is already the h1.
 
 ## First section
 

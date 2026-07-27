@@ -937,6 +937,56 @@ main > .section:last-child {
   margin-top: var(--sp-3);
 }
 
+/* --- Share ---------------------------------------------------------------- */
+
+.share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+}
+
+.share + p {
+  margin-top: var(--sp-5);
+}
+
+.share__label {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-faint);
+  margin-right: var(--sp-1);
+}
+
+.share__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  padding: var(--sp-2) var(--sp-3);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.share__link:hover,
+.share__link:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.share__link svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
 /* --- 404 ------------------------------------------------------------------ */
 
 .notfound {

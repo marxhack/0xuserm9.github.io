@@ -290,6 +290,54 @@
     update();
   }
 
+  /* --- Clipboard ---------------------------------------------------------- */
+
+  var writeClipboard = function (text, done) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(
+        function () {
+          done(true);
+        },
+        function () {
+          done(false);
+        }
+      );
+      return;
+    }
+
+    /* Fallback for non-secure contexts, e.g. a plain-http local preview. */
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try {
+      ok = document.execCommand("copy");
+    } catch (e) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    done(ok);
+  };
+
+  /* Swap a label to Copied/Failed and back. The resting text is captured once
+     at wiring time — reading it back mid-flight latches the button on "Copied"
+     after two clicks inside the timeout. */
+  var feedback = function (el) {
+    var label = el.textContent;
+    var timer = null;
+    return function (ok) {
+      el.textContent = ok ? "Copied" : "Failed";
+      window.clearTimeout(timer);
+      timer = window.setTimeout(function () {
+        el.textContent = label;
+      }, 1600);
+    };
+  };
+
   /* --- Copy buttons on code blocks --------------------------------------- */
 
   /* Horizontally scrollable regions must be keyboard-reachable. Done here so
@@ -303,55 +351,28 @@
     var btn = fig.querySelector(".code__copy");
     if (!pre || !btn) return;
 
-    /* Captured once, outside the handler: reading it back mid-flight would
-       latch the button on "Copied" after two clicks inside the timeout. */
-    var label = btn.textContent;
-    var timer = null;
-
+    var done = feedback(btn);
     btn.hidden = false;
-
-    var done = function (ok) {
-      btn.textContent = ok ? "Copied" : "Failed";
-      window.clearTimeout(timer);
-      timer = window.setTimeout(function () {
-        btn.textContent = label;
-      }, 1600);
-    };
 
     btn.addEventListener("click", function () {
       /* textContent, not innerText: <mark> is display:block, which makes
          innerText inject blank lines — enough to corrupt a copied HTTP
          request, where a blank line ends the header section. */
-      var text = pre.textContent;
+      writeClipboard(pre.textContent, done);
+    });
+  });
 
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(
-          function () {
-            done(true);
-          },
-          function () {
-            done(false);
-          }
-        );
-        return;
-      }
+  /* --- Share: copy link --------------------------------------------------- */
 
-      /* Fallback for non-secure contexts (e.g. plain-http local preview). */
-      var ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.top = "-1000px";
-      document.body.appendChild(ta);
-      ta.select();
-      var ok = false;
-      try {
-        ok = document.execCommand("copy");
-      } catch (e) {
-        ok = false;
-      }
-      document.body.removeChild(ta);
-      done(ok);
+  document.querySelectorAll(".share__copy").forEach(function (btn) {
+    var text = btn.querySelector(".share__text");
+    if (!text) return;
+
+    var done = feedback(text);
+    btn.hidden = false;
+
+    btn.addEventListener("click", function () {
+      writeClipboard(btn.getAttribute("data-url") || location.href, done);
     });
   });
 
