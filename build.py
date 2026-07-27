@@ -963,12 +963,18 @@ def main():
         else "  · analytics                   ANALYTICS_TOKEN is empty, no beacon"
     )
 
-    write_feed(posts)
-    write_sitemap(posts)
-    write_robots()
-    print(f"  ✓ feed.xml                    {len(posts)} entr(y/ies)")
-    print(f"  ✓ sitemap.xml                 {len(posts) + 2} url(s)")
-    print("  ✓ robots.txt")
+    # Never during a preview. These two are the files you hand to Google and to
+    # feed readers, so a draft URL landing in them leaks further than a stray
+    # HTML page would — and unlike that page, nothing later cleans it up.
+    if include_drafts:
+        print("  · feed.xml / sitemap.xml      not written during a --drafts preview")
+    else:
+        write_feed(posts)
+        write_sitemap(posts)
+        write_robots()
+        print(f"  ✓ feed.xml                    {len(posts)} entr(y/ies)")
+        print(f"  ✓ sitemap.xml                 {len(posts) + 2} url(s)")
+        print("  ✓ robots.txt")
 
     n = copy_attachments()
     if n:
