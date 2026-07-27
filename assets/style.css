@@ -587,6 +587,23 @@ main > .section:last-child {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
+/* Cover / banner */
+.cover {
+  max-width: var(--measure);
+  margin: var(--sp-6) auto 0;
+}
+
+.cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Reserve the box before the image lands so nothing below it jumps. */
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+}
+
 /* Table of contents */
 .toc {
   max-width: var(--measure);

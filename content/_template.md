@@ -4,6 +4,9 @@ date: 2026-01-01
 description: One sentence. Shows in the post list, search results and link previews.
 tags: []
 draft: true
+# Optional banner. Put the image in ../attachments/ first.
+# cover: screenshot.png
+# cover_alt: What the screenshot shows
 ---
 
 Opening paragraph. No heading above it, the title is already the h1.

@@ -1,8 +1,10 @@
+__pycache__/
 .DS_Store
 .idea/
 .venv/
 .vscode/
 *.log
+*.pyc
 content/.obsidian/cache
 content/.obsidian/workspace-mobile.json
 content/.obsidian/workspace.json

@@ -130,7 +130,9 @@ def read_text(path):
         die(f"{path.name}: not valid UTF-8 ({exc}). Re-save the file as UTF-8.")
 
 
-FM_LINE = re.compile(r"^(?:[A-Za-z_][\w-]*\s*:|-\s|#|\s*$)")
+# Leading whitespace is allowed: Obsidian's property editor writes block lists
+# indented ("tags:\n  - general"), which is also just how YAML is normally written.
+FM_LINE = re.compile(r"^\s*(?:[A-Za-z_][\w.-]*\s*:|-\s|#|$)")
 
 
 def parse_front_matter(text, name="<string>"):
@@ -520,7 +522,19 @@ def read_post(path, meta, body, slug, aliases):
     title = meta.get("title")
     if not title:
         title = strip_date_prefix(path.stem).replace("-", " ").title()
-        warn(f"{path.name}: no `title:` in front matter — using '{title}'.")
+        warn(f"{path.name}: no `title:` in front matter, using '{title}'.")
+
+    # Optional banner. Put the image in content/attachments/ and name it in
+    # the front matter: `cover: shot.png`. It becomes the hero and the og:image.
+    cover = meta.get("cover")
+    cover_url = ""
+    if cover:
+        cover_url = f"/assets/posts/{cover}"
+        if not (ATTACHMENTS / str(cover)).exists():
+            warn(
+                f"{path.name}: cover '{cover}' is not in content/attachments/ — "
+                "the banner will be a broken image."
+            )
 
     return {
         "source": path.name,
@@ -532,6 +546,8 @@ def read_post(path, meta, body, slug, aliases):
         "draft": bool(meta.get("draft", False)),
         "html": html,
         "toc": build_toc(getattr(md, "toc_tokens", [])),
+        "cover": cover_url,
+        "cover_alt": str(meta.get("cover_alt") or ""),
         "reading_time": max(1, round(words / WORDS_PER_MINUTE)),
         "end": str(meta.get("end") or ""),
     }
@@ -562,6 +578,19 @@ def write_post(post, template):
             f'            <span>{esc(" · ".join(post["tags"]))}</span>'
             if post["tags"] else ""
         ),
+        "OG_IMAGE": (
+            f'\n    <meta property="og:image" content="{SITE}{post["cover"]}" />'
+            f'\n    <meta name="twitter:image" content="{SITE}{post["cover"]}" />'
+            if post["cover"] else ""
+        ),
+        "COVER": (
+            '        <figure class="cover">\n'
+            f'          <img src="{post["cover"]}" alt="{esc(post["cover_alt"])}" '
+            'width="1200" height="630" fetchpriority="high" decoding="async">\n'
+            '        </figure>'
+            if post["cover"] else ""
+        ),
+        "TWITTER_CARD": "summary_large_image" if post["cover"] else "summary",
         "TOC": post["toc"],
         "BODY": indent(post["html"], 10),
         # Only what the author actually wrote. A default sign-off reads as
