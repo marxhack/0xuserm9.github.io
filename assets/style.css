@@ -12,6 +12,13 @@
   box-sizing: border-box;
 }
 
+/* The UA's `[hidden] { display: none }` is beaten by any author display rule,
+   so a component styled `display: flex` stays visible while claiming to be
+   hidden. Everything that ships hidden-until-JS depends on this holding. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }

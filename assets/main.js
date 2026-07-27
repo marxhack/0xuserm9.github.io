@@ -38,8 +38,33 @@
 
     /* Pointer state. `sx`/`sy` chase the raw position so the pull trails the
        cursor instead of snapping to it, and `strength` fades the whole effect
-       in and out rather than switching it. */
-    var ptr = { x: 0, y: 0, sx: 0, sy: 0, strength: 0, target: 0, seen: false };
+       in and out rather than switching it.
+
+       `mouse` latches once a real mouse moves; `touching` is true only while a
+       finger is down. When neither holds, the reveal drives itself — see
+       autopilot() below. */
+    var ptr = {
+      x: 0, y: 0, sx: 0, sy: 0,
+      strength: 0, target: 0,
+      seen: false, mouse: false, touching: false
+    };
+
+    /* A touch device never produces a hover, so a pointer-only reveal leaves
+       the network sitting at its base alpha forever — a blank background on
+       every phone. Drift the reveal along a slow path instead. This also means
+       the page is alive on desktop before the mouse has moved at all. */
+    var autopilot = function (t) {
+      if (ptr.mouse || ptr.touching) return;
+      var s = t * 0.00012;
+      ptr.x = w * (0.5 + 0.34 * Math.sin(s));
+      ptr.y = h * (0.42 + 0.27 * Math.cos(s * 1.31));
+      ptr.target = 1;
+      if (!ptr.seen) {
+        ptr.sx = ptr.x;
+        ptr.sy = ptr.y;
+        ptr.seen = true;
+      }
+    };
 
     var build = function () {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -62,7 +87,8 @@
       }
     };
 
-    var draw = function () {
+    var draw = function (t) {
+      autopilot(t || 0);
       ctx.clearRect(0, 0, w, h);
 
       var i, j, a, b, dx, dy, d, f;
@@ -179,8 +205,8 @@
       }
     };
 
-    var frame = function () {
-      draw();
+    var frame = function (t) {
+      draw(t);
       raf = window.requestAnimationFrame(frame);
     };
 
@@ -199,7 +225,7 @@
 
     var sync = function () {
       stop();
-      if (reduced.matches) draw();
+      if (reduced.matches) draw(0);
       else start();
     };
 
@@ -224,12 +250,16 @@
       else if (!reduced.matches) start();
     });
 
-    /* Mouse only. Touch would fire once on tap and leave the pull stranded
-       where the finger last was, which reads as a bug rather than an effect. */
+    /* A real mouse takes over permanently. A finger takes over only while it
+       is down — on release the drift resumes, rather than stranding the reveal
+       wherever the finger last was. */
     window.addEventListener(
       "pointermove",
       function (e) {
-        if (e.pointerType === "touch") return;
+        var touch = e.pointerType === "touch";
+        if (touch) ptr.touching = true;
+        else ptr.mouse = true;
+
         if (!ptr.seen) {
           ptr.sx = e.clientX;
           ptr.sy = e.clientY;
@@ -241,6 +271,28 @@
       },
       { passive: true }
     );
+
+    window.addEventListener(
+      "pointerdown",
+      function (e) {
+        if (e.pointerType !== "touch") return;
+        ptr.touching = true;
+        ptr.x = e.clientX;
+        ptr.y = e.clientY;
+        ptr.target = 1;
+      },
+      { passive: true }
+    );
+
+    ["pointerup", "pointercancel"].forEach(function (type) {
+      window.addEventListener(
+        type,
+        function (e) {
+          if (e.pointerType === "touch") ptr.touching = false;
+        },
+        { passive: true }
+      );
+    });
 
     /* relatedTarget === null means the pointer left the window entirely. */
     document.addEventListener("pointerout", function (e) {
@@ -292,20 +344,10 @@
 
   /* --- Clipboard ---------------------------------------------------------- */
 
-  var writeClipboard = function (text, done) {
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(
-        function () {
-          done(true);
-        },
-        function () {
-          done(false);
-        }
-      );
-      return;
-    }
-
-    /* Fallback for non-secure contexts, e.g. a plain-http local preview. */
+  /* Synchronous path. Used where the async API is unavailable, and as a retry
+     when it exists but refuses — a denied permission should not be the end of
+     it. */
+  var legacyCopy = function (text) {
     var ta = document.createElement("textarea");
     ta.value = text;
     ta.setAttribute("readonly", "");
@@ -320,7 +362,22 @@
       ok = false;
     }
     document.body.removeChild(ta);
-    done(ok);
+    return ok;
+  };
+
+  var writeClipboard = function (text, done) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(
+        function () {
+          done(true);
+        },
+        function () {
+          done(legacyCopy(text));
+        }
+      );
+      return;
+    }
+    done(legacyCopy(text));
   };
 
   /* Swap a label to Copied/Failed and back. The resting text is captured once

@@ -583,6 +583,21 @@ def read_post(path, meta, body, slug, aliases):
     }
 
 
+def cover_figure(post):
+    """Declare the file's real intrinsic size. Hardcoding 1200x630 lies to the
+    browser about the aspect ratio it should reserve."""
+    if not post["cover"]:
+        return ""
+    dims = image_size(ATTACHMENTS / Path(post["cover"]).name)
+    size = f' width="{dims[0]}" height="{dims[1]}"' if dims else ""
+    return (
+        '        <figure class="cover">\n'
+        f'          <img src="{post["cover"]}" alt="{esc(post["cover_alt"])}"'
+        f'{size} fetchpriority="high" decoding="async">\n'
+        "        </figure>"
+    )
+
+
 def og_image_tags(post):
     """og:image plus the extras that make a share card render properly."""
     if not post["cover"]:
@@ -628,13 +643,7 @@ def write_post(post, template):
             if post["tags"] else ""
         ),
         "OG_IMAGE": og_image_tags(post),
-        "COVER": (
-            '        <figure class="cover">\n'
-            f'          <img src="{post["cover"]}" alt="{esc(post["cover_alt"])}" '
-            'width="1200" height="630" fetchpriority="high" decoding="async">\n'
-            '        </figure>'
-            if post["cover"] else ""
-        ),
+        "COVER": cover_figure(post),
         "TWITTER_CARD": "summary_large_image" if post["cover"] else "summary",
         "TOC": post["toc"],
         "BODY": indent(post["html"], 10),
