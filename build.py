@@ -766,8 +766,7 @@ def write_post(post, template):
         "URL_ENC": quote(url, safe=""),
         "TITLE_ENC": quote(post["title"], safe=""),
         "DATE_ISO": post["date"].isoformat(),
-        "DATE_HUMAN": post["date"].strftime("%-d %B %Y"),
-        "READING_TIME": str(post["reading_time"]),
+        "DATE_HUMAN": post["date"].strftime("%d %B %Y"),        "READING_TIME": str(post["reading_time"]),
         "SOURCE": post["source"],
         "DEK": (
             f'          <p class="post__dek">{esc(post["description"])}</p>'
@@ -817,8 +816,7 @@ def row_html(post):
               aria-labelledby="{anchor}"
             >
               <span class="row__date">
-                <time datetime="{post['date'].isoformat()}">{post['date'].strftime('%-d %b %Y')}</time>
-              </span>
+               <time datetime="{post['date'].isoformat()}">{post['date'].strftime('%d %b %Y')}</time>              </span>
               <span class="row__title" id="{anchor}">{esc(post['title'])}</span>{dek}{tags_block}
             </a>
           </li>"""

