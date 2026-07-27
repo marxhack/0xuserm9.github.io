@@ -18,12 +18,6 @@ draft: false
 
 # Break the Bank — UTCTF 2026
 
-One of my favorite web challenges from **UTCTF 2026**. At first glance it looked like a classic banking application, but the real vulnerability wasn't hidden inside complicated business logic—it came from a fundamental misunderstanding of how **JWE** works.
-
-The application encrypted authentication tokens using **RSA-OAEP-256** and **AES-GCM**, but accidentally exposed its **public key** through an indexed directory. Since anyone can encrypt data with a public key, this allowed attackers to generate completely new authentication tokens that the server happily accepted as legitimate.
-
----
-
 ## Challenge Information
 
 | Field | Value |
@@ -201,13 +195,6 @@ from joserfc import jwe
 from joserfc.jwk import RSAKey
 from joserfc.jwe import JWERegistry
 import json
-
-# Load the exposed public key
-
-# In the CTF, you'd save it as key.pem locally
-
-# with open("key.pem", "rb") as f:
-#     key = RSAKey.import_key(f.read())
 
 registry = JWERegistry(
     algorithms=["RSA-OAEP-256", "A256GCM"]
