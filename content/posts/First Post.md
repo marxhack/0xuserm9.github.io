@@ -4,7 +4,9 @@ date: 2026-07-27
 description: What this site is for, and what I plan to put on it.
 tags:
   - general
-draft: true
+cover: first-post-cover.png
+cover_alt: The masthead of this site, with the background network lit up around the cursor.
+draft: false
 ---
 
 This is my first post. I'll write about anything here: bug bounty writeups,
