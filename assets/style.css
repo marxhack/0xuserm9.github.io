@@ -98,7 +98,7 @@ button {
   --fs-h3: 1.5rem;
   --fs-h2: 1.625rem;
   --fs-h1: 2rem;
-  --fs-masthead: clamp(2.75rem, 1.6rem + 5.1vw, 5.5rem);
+  --fs-masthead: clamp(1.875rem, 1.35rem + 2.3vw, 2.75rem);
 
   --lh-body: 1.66;
 
@@ -252,7 +252,7 @@ a:hover {
 /* --- Masthead (home) ------------------------------------------------------ */
 
 .masthead {
-  padding-block: var(--sp-9) var(--sp-7);
+  padding-block: var(--sp-7) var(--sp-6);
 }
 
 /* Circular frame: one solid, high-contrast ring.
@@ -273,30 +273,38 @@ a:hover {
 
 .masthead__name {
   font-size: var(--fs-masthead);
-  line-height: 0.94;
+  line-height: 1.05;
   font-weight: 600;
   letter-spacing: -0.015em;
-  max-width: 14ch;
+  max-width: 20ch;
 }
 
+/* The one-line bio. Set below the name rather than as a second headline —
+   quieter than the name, so the two do not compete. */
 .masthead__dek {
-  margin-top: var(--sp-5);
-  font-size: var(--fs-h4);
-  line-height: 1.4;
-  font-weight: 600;
-  letter-spacing: -0.004em;
-  color: var(--text);
-  max-width: 46ch;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-dim);
+  max-width: 52ch;
 }
 
-.masthead__links {
-  margin-top: var(--sp-6);
+/* Bug bounty profile wordmarks. */
+.profiles {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-5) 0 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-2) var(--sp-5);
   font-family: var(--font-sans);
   font-size: var(--fs-meta);
   font-size-adjust: 0.52;
+}
+
+.profiles a {
+  color: var(--text);
 }
 
 /* The one gradient on the site: 2px, horizontal, under the masthead. */
@@ -1003,7 +1011,7 @@ main > .section:last-child {
   }
 
   .masthead {
-    padding-block: var(--sp-10) var(--sp-8);
+    padding-block: var(--sp-8) var(--sp-7);
   }
 
   .section {
