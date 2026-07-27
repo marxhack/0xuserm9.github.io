@@ -372,6 +372,10 @@ a:hover {
   --type-key: 6;
 }
 
+.type__word > span:nth-child(8) {
+  --type-key: 7;
+}
+
 /* Drawn rather than set as "|" so it keeps the same weight and height in every
    font on the stack. Sits out the typing at opacity 0 and takes over on the
    step after the last letter lands. */
