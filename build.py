@@ -38,6 +38,8 @@ TEMPLATE = ROOT / "templates" / "post.html"
 HOME_PAGE = ROOT / "index.html"
 
 SITE = "https://daffailhamramadan.github.io"
+SITE_NAME = "Daffa Ilham Ramadan"
+X_HANDLE = "@FroztNova127"
 RECENT_ON_HOME = 5
 WORDS_PER_MINUTE = 220
 
@@ -300,6 +302,34 @@ def strip_date_prefix(stem):
     return re.sub(r"^\d{4}-\d{2}-\d{2}-", "", stem)
 
 
+def image_size(path):
+    """Width/height straight from the file header. Declaring them lets a card
+    renderer lay the image out before it has finished downloading it."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+    if data[:2] == b"\xff\xd8":
+        i = 2
+        while i < len(data) - 9:
+            if data[i] != 0xFF:
+                i += 1
+                continue
+            marker = data[i + 1]
+            if marker in (0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7,
+                          0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF):
+                return (int.from_bytes(data[i + 7:i + 9], "big"),
+                        int.from_bytes(data[i + 5:i + 7], "big"))
+            i += 2 + int.from_bytes(data[i + 2:i + 4], "big")
+        return None
+    if data[:6] in (b"GIF87a", b"GIF89a"):
+        return (int.from_bytes(data[6:8], "little"),
+                int.from_bytes(data[8:10], "little"))
+    return None
+
+
 def esc(s):
     return (
         str(s)
@@ -553,6 +583,25 @@ def read_post(path, meta, body, slug, aliases):
     }
 
 
+def og_image_tags(post):
+    """og:image plus the extras that make a share card render properly."""
+    if not post["cover"]:
+        return ""
+    url = f"{SITE}{post['cover']}"
+    tags = [
+        f'<meta property="og:image" content="{url}" />',
+        f'<meta name="twitter:image" content="{url}" />',
+    ]
+    dims = image_size(ATTACHMENTS / Path(post["cover"]).name)
+    if dims:
+        tags.append(f'<meta property="og:image:width" content="{dims[0]}" />')
+        tags.append(f'<meta property="og:image:height" content="{dims[1]}" />')
+    if post["cover_alt"]:
+        tags.append(f'<meta property="og:image:alt" content="{esc(post["cover_alt"])}" />')
+        tags.append(f'<meta name="twitter:image:alt" content="{esc(post["cover_alt"])}" />')
+    return "\n" + "\n".join("    " + t for t in tags)
+
+
 PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
 
 
@@ -578,11 +627,7 @@ def write_post(post, template):
             f'            <span>{esc(" · ".join(post["tags"]))}</span>'
             if post["tags"] else ""
         ),
-        "OG_IMAGE": (
-            f'\n    <meta property="og:image" content="{SITE}{post["cover"]}" />'
-            f'\n    <meta name="twitter:image" content="{SITE}{post["cover"]}" />'
-            if post["cover"] else ""
-        ),
+        "OG_IMAGE": og_image_tags(post),
         "COVER": (
             '        <figure class="cover">\n'
             f'          <img src="{post["cover"]}" alt="{esc(post["cover_alt"])}" '
