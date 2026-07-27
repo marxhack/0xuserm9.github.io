@@ -49,6 +49,10 @@ X_HANDLE = "@FroztNova127"
 RECENT_ON_HOME = 5
 WORDS_PER_MINUTE = 220
 
+# Cloudflare Web Analytics site token. Empty emits no beacon at all, so a fresh
+# clone builds a tracker-free site until this is filled in.
+ANALYTICS_TOKEN = "29dcc3b4453f45fcbeffe88e05ce15dd"
+
 # posts/index.html is the archive shell, not a post.
 RESERVED_SLUGS = {"index"}
 
@@ -628,6 +632,7 @@ PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
 
 def write_post(post, template):
     url = f"{SITE}/posts/{post['slug']}.html"
+    beacon = analytics_snippet()
     values = {
         "TITLE": esc(post["title"]),
         "DESCRIPTION": esc(post["description"] or post["title"]),
@@ -649,6 +654,7 @@ def write_post(post, template):
             if post["tags"] else ""
         ),
         "OG_IMAGE": og_image_tags(post),
+        "ANALYTICS": f"\n{beacon}" if beacon else "",
         "COVER": cover_figure(post),
         "TWITTER_CARD": "summary_large_image" if post["cover"] else "summary",
         "TOC": post["toc"],
@@ -694,18 +700,20 @@ def row_html(post):
 
 
 START, END = "<!-- POSTS:START -->", "<!-- POSTS:END -->"
+ANALYTICS_START, ANALYTICS_END = "<!-- ANALYTICS:START -->", "<!-- ANALYTICS:END -->"
 
 
-def replace_between(text, block, path):
-    if text.count(START) != 1 or text.count(END) != 1:
+def replace_between(text, block, path, start=START, end=END, closing_indent=" " * 10):
+    if text.count(start) != 1 or text.count(end) != 1:
         die(
-            f"{path.name}: expected exactly one {START} and one {END}. "
-            "build.py needs them to know where the post list goes."
+            f"{path.name}: expected exactly one {start} and one {end}. "
+            "build.py needs them to know where the generated block goes."
         )
-    i, j = text.index(START), text.index(END)
+    i, j = text.index(start), text.index(end)
     if j < i:
-        die(f"{path.name}: {END} appears before {START}.")
-    return text[: i + len(START)] + "\n" + block + "\n          " + text[j:]
+        die(f"{path.name}: {end} appears before {start}.")
+    body = f"\n{block}" if block else ""
+    return text[: i + len(start)] + body + "\n" + closing_indent + text[j:]
 
 
 def rebuild_indexes(posts):
@@ -723,6 +731,51 @@ def rebuild_indexes(posts):
     HOME_PAGE.write_text(
         replace_between(read_text(HOME_PAGE), recent, HOME_PAGE), encoding="utf-8"
     )
+
+
+# --------------------------------------------------------------------------
+# Analytics
+# --------------------------------------------------------------------------
+
+def analytics_snippet(indent_spaces=4):
+    """The Cloudflare Web Analytics beacon, or nothing if no token is set.
+
+    Cloudflare filters incoming hits by hostname, so a local preview of a page
+    carrying this beacon never shows up in the dashboard. No need to strip it
+    from anything but a real build.
+    """
+    if not ANALYTICS_TOKEN:
+        return ""
+    pad = " " * indent_spaces
+    # type="module" is Cloudflare's own form. Modules defer by default, so this
+    # never blocks rendering and needs no explicit defer.
+    return (
+        f'{pad}<script\n'
+        f'{pad}  type="module"\n'
+        f'{pad}  src="https://static.cloudflareinsights.com/beacon.min.js"\n'
+        f'{pad}  data-cf-beacon=\'{{"token": "{ANALYTICS_TOKEN}"}}\'\n'
+        f'{pad}></script>'
+    )
+
+
+def inject_analytics():
+    """Post pages get the beacon through the template placeholder. These three
+    are hand-written shells, so they carry marker comments instead."""
+    block = analytics_snippet()
+    for page in (HOME_PAGE, OUT / "index.html", ROOT / "404.html"):
+        if not page.exists():
+            die(f"{page.relative_to(ROOT)} is missing — it is a page shell, not generated.")
+        page.write_text(
+            replace_between(
+                read_text(page),
+                block,
+                page,
+                start=ANALYTICS_START,
+                end=ANALYTICS_END,
+                closing_indent=" " * 4,
+            ),
+            encoding="utf-8",
+        )
 
 
 def copy_attachments():
@@ -777,6 +830,13 @@ def main():
     rebuild_indexes(posts)
     print(f"  ✓ posts/index.html            {len(posts)} post(s)")
     print(f"  ✓ index.html                  {min(len(posts), RECENT_ON_HOME)} recent")
+
+    inject_analytics()
+    print(
+        "  ✓ analytics                   Cloudflare beacon on every page"
+        if ANALYTICS_TOKEN
+        else "  · analytics                   ANALYTICS_TOKEN is empty, no beacon"
+    )
 
     n = copy_attachments()
     if n:
