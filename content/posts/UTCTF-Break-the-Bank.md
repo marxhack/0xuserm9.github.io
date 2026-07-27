@@ -14,8 +14,6 @@ draft: false
 
 ![UTCTF 2026 - Break the Bank](https://0xuserm9.vercel.app/images/bankk/UTCTF.png)
 
-# Break the Bank — UTCTF 2026
-
 ## Challenge Information
 
 | Field | Value |
