@@ -320,6 +320,12 @@ a:hover {
   border-bottom: 1px solid var(--rule);
 }
 
+/* The footer draws its own top rule, so the last section must not draw one
+   too — otherwise two hairlines stack a few pixels apart. */
+main > .section:last-child {
+  border-bottom: 0;
+}
+
 .section__head {
   display: flex;
   align-items: baseline;
@@ -424,39 +430,8 @@ a:hover {
   max-width: 60ch;
 }
 
-/* --- Contact -------------------------------------------------------------- */
-
-.contact {
-  margin: 0;
-  border-top: 1px solid var(--rule);
-}
-
-.contact__row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: var(--sp-4);
-  align-items: center;
-  padding-block: var(--sp-4);
-  border-bottom: 1px solid var(--rule);
-}
-
-.contact dt {
-  color: var(--text-faint);
-  transition: color 120ms ease;
-}
-
-.contact .icon {
-  display: block;
-  width: 20px;
-  height: 20px;
-}
-
-.contact__row:hover dt,
-.contact__row:focus-within dt {
-  color: var(--accent);
-}
-
-/* Screen-reader-only: keeps the label the icon replaced. */
+/* Screen-reader-only: carries the label an icon-only link would otherwise
+   have no accessible name from. */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -469,14 +444,6 @@ a:hover {
   border: 0;
 }
 
-.contact dd {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--fs-meta);
-  font-size-adjust: 0.52;
-  overflow-wrap: anywhere;
-}
-
 /* --- Footer --------------------------------------------------------------- */
 
 .footer {
@@ -487,7 +454,39 @@ a:hover {
   color: var(--text-faint);
   display: flex;
   flex-direction: column;
+  gap: var(--sp-5);
+  border-top: 1px solid var(--rule);
+  margin-top: var(--sp-7);
+}
+
+.social {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
   gap: var(--sp-2);
+}
+
+/* 20px icon + 8px padding = a 36px hit area, comfortably over the 24px
+   minimum for a pointer target. */
+.social a {
+  display: block;
+  padding: var(--sp-2);
+  color: var(--text-faint);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.social a:hover,
+.social a:focus-visible {
+  color: var(--accent);
+}
+
+.social .icon {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
 
 /* --- Archive header ------------------------------------------------------- */
@@ -973,7 +972,13 @@ a:hover {
   .footer {
     flex-direction: row;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
+  }
+
+  /* Cancel the last icon's hit-area padding so the row optically aligns
+     with the container edge rather than sitting 8px inside it. */
+  .social {
+    margin-inline-end: calc(var(--sp-2) * -1);
   }
 
   .post__body th,

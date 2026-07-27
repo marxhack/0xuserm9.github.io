@@ -90,95 +90,48 @@
         </ul>
       </section>
 
-      <!-- ── Contact ─────────────────────────────────────────────────── -->
-      <section class="section container" aria-labelledby="contact-heading">
-        <div class="section__head">
-          <h2 class="eyebrow" id="contact-heading">Contact</h2>
-        </div>
-
-        <!-- Icons are decorative (aria-hidden); the label each one replaces is
-             kept for screen readers in the .visually-hidden span. -->
-        <dl class="contact">
-          <div class="contact__row">
-            <dt>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <rect
-                  x="2.75"
-                  y="5"
-                  width="18.5"
-                  height="14"
-                  rx="2.5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                />
-                <path
-                  d="M3.5 6.75 12 12.5l8.5-5.75"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <span class="visually-hidden">Email</span>
-            </dt>
-            <dd><a href="mailto:daffailhamramadan127@gmail.com">daffailhamramadan127@gmail.com</a></dd>
-          </div>
-          <div class="contact__row">
-            <dt>
-              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                <path
-                  fill="currentColor"
-                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
-                />
-              </svg>
-              <span class="visually-hidden">GitHub</span>
-            </dt>
-            <dd>
-              <a href="https://github.com/daffailhamramadan" rel="me"
-                >github.com/daffailhamramadan</a
-              >
-            </dd>
-          </div>
-
-          <div class="contact__row">
-            <dt>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  fill="currentColor"
-                  d="M4.98 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0M.02 8h4.96v14H.02zm7.98 0h4.76v1.91h.07c.66-1.2 2.28-2.46 4.7-2.46 5.03 0 5.96 3.18 5.96 7.31V22h-4.96v-6.29c0-1.5-.03-3.43-2.09-3.43s-2.41 1.63-2.41 3.32V22H8z"
-                />
-              </svg>
-              <span class="visually-hidden">LinkedIn</span>
-            </dt>
-            <dd>
-              <a
-                href="https://www.linkedin.com/in/daffa-ilham-ramadan/"
-                rel="me"
-                >linkedin.com/in/daffa-ilham-ramadan</a
-              >
-            </dd>
-          </div>
-
-          <!-- Uncomment once the handle is real. Do not ship it with a
-               placeholder value in it.
-          <div class="contact__row">
-            <dt>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="currentColor" d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>
-              </svg>
-              <span class="visually-hidden">X</span>
-            </dt>
-            <dd><a href="https://x.com/HANDLE" rel="me">@HANDLE</a></dd>
-          </div>
-          -->
-        </dl>
-      </section>
     </main>
 
     <footer class="footer container">
       <span>&copy; <span data-year>2026</span> Daffa Ilham Ramadan</span>
+
+      <!-- Icon-only links. Each carries its label in a .visually-hidden span,
+           so it still has an accessible name and is announced correctly. -->
+      <ul class="social">
+        <li>
+          <a href="mailto:daffailhamramadan127@gmail.com">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2.75" y="5" width="18.5" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M3.5 6.75 12 12.5l8.5-5.75" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="visually-hidden">Email</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/daffailhamramadan" rel="me">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+            <span class="visually-hidden">GitHub</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/in/daffa-ilham-ramadan/" rel="me">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0M.02 8h4.96v14H.02zm7.98 0h4.76v1.91h.07c.66-1.2 2.28-2.46 4.7-2.46 5.03 0 5.96 3.18 5.96 7.31V22h-4.96v-6.29c0-1.5-.03-3.43-2.09-3.43s-2.41 1.63-2.41 3.32V22H8z"/>
+            </svg>
+            <span class="visually-hidden">LinkedIn</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://x.com/FroztNova127" rel="me">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>
+            </svg>
+            <span class="visually-hidden">X</span>
+          </a>
+        </li>
+      </ul>
     </footer>
 
     <script src="/assets/main.js" defer></script>
