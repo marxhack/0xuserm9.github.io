@@ -11,4 +11,4 @@ draft: false
 
 This is my first post. I'll write about anything here: bug bounty writeups,
 security research, tools I build, my journey, or whatever
-	else comes to mind. Mostly I'm writing it down for myself, but If it ends up useful for someone else, im happy. 
+	else comes to mind. Mostly I'm writing it down for myself, but If it ends up useful for someone else, I'm happy.
