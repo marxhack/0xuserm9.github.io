@@ -1,0 +1,1094 @@
+/* ==========================================================================
+   daffailhamramadan.github.io
+   Editorial dark. Type carries the design; chrome stays out of the way.
+   Hand-written, no build step, no network requests.
+   ========================================================================== */
+
+/* --- Reset ---------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ol,
+ul {
+  margin: 0;
+}
+
+ol[class],
+ul[class] {
+  list-style: none;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* --- Tokens --------------------------------------------------------------- */
+
+:root {
+  /* Surfaces. Separated by hairlines first, fill second. */
+  --bg: #0a0a0f;
+  --bg-raised: #16161f;
+  --bg-code: #101018;
+  --bg-code-bar: #14141f;
+
+  --rule: #22222d;
+  --rule-strong: #33333f;
+
+  /* Warm off-white, not pure white: pure white halates at a 68ch measure. */
+  --text: #e9e6e0;
+  --text-dim: #a6a29b;
+  --text-faint: #8b8880;
+
+  /* One accent. Amber, deliberately not the template blue/violet. */
+  --accent: #f0b357;
+  --accent-deep: #b2603a;
+  --accent-underline: rgba(240, 179, 87, 0.7); /* 5.55:1 on --bg */
+  --mark-bg: rgba(240, 179, 87, 0.14);
+
+  /* Code tokens, hand-applied. */
+  --code-comment: #7f7c74;
+  --code-literal: #cbb488;
+  --code-flag: #e0a3a3;
+
+  --font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4",
+    "Source Serif Pro", Georgia, "Nimbus Roman No9 L", "Liberation Serif",
+    "Times New Roman", Times, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "DejaVu Sans Mono", "Liberation Mono", monospace;
+
+  /* Type scale: 16px root, 1.25 ratio, two steps hand-corrected. */
+  --fs-micro: 0.75rem;
+  --fs-meta: 0.875rem;
+  --fs-ui: 1.0625rem;
+  --fs-body: 1.0625rem;
+  --fs-code: 0.84375rem;
+  --fs-h4: 1.375rem;
+  --fs-h3: 1.5rem;
+  --fs-h2: 1.625rem;
+  --fs-h1: 2rem;
+  --fs-masthead: clamp(2.75rem, 1.6rem + 5.1vw, 5.5rem);
+
+  --lh-body: 1.66;
+
+  /* 4px vertical rhythm. Every margin below is one of these. */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 128px;
+
+  --measure: 68ch;
+  --code-pad: var(--sp-4);
+  --container: 1120px;
+  --pad: 20px;
+  --rail-h: 52px;
+
+  color-scheme: dark;
+}
+
+/* --- Base ----------------------------------------------------------------- */
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-synthesis-weight: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size-adjust: 0.48; /* normalise the serif fallbacks' differing x-heights */
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+/* Links are an underline, not a colour. */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-underline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color 120ms ease, color 120ms ease;
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule-strong);
+  padding: var(--sp-3) var(--sp-4);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: var(--sp-4);
+  top: var(--sp-4);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  line-height: 1.25;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-faint);
+  font-size-adjust: 0.52;
+}
+
+/* --- Top rail ------------------------------------------------------------- */
+
+.rail {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+}
+
+.rail__inner {
+  height: var(--rail-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.rail__home,
+.rail__nav a {
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  text-decoration: none;
+  color: var(--text-dim);
+}
+
+.rail__home {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rail__home .rail__full {
+  display: none;
+}
+
+.rail__nav {
+  display: flex;
+  gap: var(--sp-5);
+}
+
+.rail__nav a:hover,
+.rail__nav a[aria-current="page"] {
+  color: var(--text);
+}
+
+.rail__nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.3em;
+}
+
+/* --- Masthead (home) ------------------------------------------------------ */
+
+.masthead {
+  padding-block: var(--sp-9) var(--sp-7);
+}
+
+.masthead__name {
+  font-size: var(--fs-masthead);
+  line-height: 0.94;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  max-width: 14ch;
+}
+
+.masthead__dek {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-h4);
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: -0.004em;
+  color: var(--text);
+  max-width: 46ch;
+}
+
+.masthead__bio {
+  margin-top: var(--sp-5);
+  max-width: 60ch;
+  color: var(--text-dim);
+  font-size: var(--fs-ui);
+  line-height: 1.6;
+}
+
+.masthead__bio + .masthead__bio {
+  margin-top: var(--sp-4);
+}
+
+.masthead__links {
+  margin-top: var(--sp-6);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-5);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+}
+
+/* The one gradient on the site: 2px, horizontal, under the masthead. */
+.masthead__rule {
+  height: 2px;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(
+    90deg,
+    #f0b357 0%,
+    #b2603a 26%,
+    rgba(34, 34, 45, 0.9) 58%,
+    rgba(34, 34, 45, 0) 100%
+  );
+}
+
+/* --- Sections ------------------------------------------------------------- */
+
+.section {
+  padding-block: var(--sp-7);
+  border-bottom: 1px solid var(--rule);
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+
+.section__more {
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  color: var(--text-dim);
+}
+
+/* --- Writeup rows --------------------------------------------------------- */
+
+.rows {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.row {
+  border-bottom: 1px solid var(--rule);
+}
+
+.row__link {
+  display: block;
+  padding: var(--sp-5) var(--sp-4);
+  margin-inline: calc(var(--sp-4) * -1);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.row__link:hover,
+.row__link:focus-visible {
+  background: var(--bg-raised);
+  border-left-color: var(--accent);
+}
+
+.row__date {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--text-faint);
+  margin-bottom: var(--sp-2);
+}
+
+.row__title {
+  font-size: var(--fs-h4);
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.004em;
+}
+
+.row__link:hover .row__title {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.18em;
+}
+
+.row__dek {
+  margin-top: var(--sp-2);
+  color: var(--text-dim);
+  font-size: var(--fs-ui);
+  line-height: 1.5;
+  max-width: 70ch;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.row__tags {
+  margin-top: var(--sp-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-size-adjust: 0.52;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.row__tags > * {
+  border: 1px solid var(--rule);
+  padding: 2px var(--sp-2);
+  border-radius: 2px;
+}
+
+.empty-note {
+  color: var(--text-dim);
+  font-size: var(--fs-ui);
+  padding-block: var(--sp-5);
+  max-width: 60ch;
+}
+
+/* --- Contact -------------------------------------------------------------- */
+
+.contact {
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.contact__row {
+  display: block;
+  padding-block: var(--sp-4);
+  border-bottom: 1px solid var(--rule);
+}
+
+.contact dt {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-size-adjust: 0.52;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-faint);
+  margin-bottom: var(--sp-1);
+}
+
+.contact dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  overflow-wrap: anywhere;
+}
+
+/* --- Footer --------------------------------------------------------------- */
+
+.footer {
+  padding-block: var(--sp-6) var(--sp-7);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  color: var(--text-faint);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* --- Archive header ------------------------------------------------------- */
+
+.page-head {
+  padding-block: var(--sp-8) var(--sp-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-head h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+}
+
+.page-head__dek {
+  margin-top: var(--sp-4);
+  color: var(--text-dim);
+  font-size: var(--fs-ui);
+  max-width: 52ch;
+}
+
+/* --- Reading progress ----------------------------------------------------- */
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* --- Post ----------------------------------------------------------------- */
+
+.post {
+  padding-block: var(--sp-7) var(--sp-8);
+}
+
+.post__header {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.post__title {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-h1);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+}
+
+.post__dek {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-h4);
+  line-height: 1.4;
+  color: var(--text-dim);
+  max-width: 46ch;
+}
+
+.post__meta {
+  margin-top: var(--sp-5);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-5);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Table of contents */
+.toc {
+  max-width: var(--measure);
+  margin: var(--sp-6) auto 0;
+  border: 1px solid var(--rule);
+  padding: var(--sp-4);
+}
+
+.toc > summary {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-size-adjust: 0.52;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-4) 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  counter-reset: toc;
+}
+
+.toc li {
+  counter-increment: toc;
+  border-left: 2px solid var(--rule-strong);
+  padding: var(--sp-1) 0 var(--sp-1) var(--sp-3);
+}
+
+.toc li.is-active {
+  border-left-color: var(--accent);
+}
+
+.toc li.is-active a {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.toc a {
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.toc a::before {
+  content: counter(toc, decimal-leading-zero) "  ";
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.toc a:hover {
+  color: var(--text);
+}
+
+/* Body */
+.post__body {
+  max-width: var(--measure);
+  margin: var(--sp-7) auto 0;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+}
+
+.post__body > * + * {
+  margin-top: 1.15em;
+}
+
+.post__body h2 {
+  position: relative;
+  font-size: var(--fs-h2);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  margin-top: var(--sp-8);
+  margin-bottom: 0;
+  scroll-margin-top: var(--sp-5);
+}
+
+/* Space below a heading has to be set on the next element. As margin-bottom it
+   would collapse into the larger margin-top from `.post__body > * + *`. */
+.post__body h2 + * {
+  margin-top: var(--sp-4);
+}
+
+.post__body h2 .num {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-size-adjust: 0.52;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums lining-nums;
+  display: block;
+  margin-bottom: var(--sp-2);
+}
+
+.post__body h3 {
+  font-size: var(--fs-h3);
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  margin-top: var(--sp-6);
+  margin-bottom: 0;
+}
+
+.post__body h3 + * {
+  margin-top: var(--sp-3);
+}
+
+.post__body ul,
+.post__body ol {
+  padding-left: 1.4em;
+}
+
+.post__body li + li {
+  margin-top: var(--sp-2);
+}
+
+.post__body strong {
+  font-weight: 600;
+}
+
+/* Inline code must never force a horizontal page scroll. */
+.post__body :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  font-size-adjust: 0.52;
+  background: var(--bg-code);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.1em 0.32em;
+  overflow-wrap: anywhere;
+}
+
+/* Blockquote */
+.post__body blockquote {
+  border-left: 2px solid var(--rule-strong);
+  padding-left: var(--sp-5);
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* Aside / margin note — inline at every width. */
+.note {
+  border-left: 2px solid var(--accent);
+  padding: var(--sp-3) 0 var(--sp-3) var(--sp-4);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+.note b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Code figure */
+.code {
+  margin-inline: 0;
+  border: 1px solid var(--rule);
+  background: var(--bg-code);
+  position: relative;
+}
+
+.code__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  background: var(--bg-code-bar);
+  border-bottom: 1px solid var(--rule);
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-size-adjust: 0.52;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.code__copy {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-dim);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  padding: 2px var(--sp-2);
+  opacity: 0;
+  transition: opacity 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.code:hover .code__copy,
+.code:focus-within .code__copy {
+  opacity: 1;
+}
+
+.code__copy:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+/* Touch devices have no hover state — the button must always be visible. */
+@media (hover: none) {
+  .code__copy {
+    opacity: 1;
+  }
+}
+
+.code pre {
+  margin: 0;
+  padding-block: var(--sp-4);
+  padding-inline: var(--code-pad);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+  font-size-adjust: 0.52;
+  line-height: 1.6;
+  tab-size: 2;
+  color: var(--text);
+}
+
+/* The code needs a box as wide as its longest line, otherwise a block-level
+   <mark> sizes to the visible column and tears off when the block scrolls. */
+.code pre > code {
+  display: inline-block;
+  min-width: 100%;
+  font-family: inherit;
+}
+
+/* Authored emphasis instead of syntax colouring. Bleeds to the figure's
+   inner edge by cancelling the pre's own inline padding. */
+.code mark {
+  display: block;
+  background: var(--mark-bg);
+  color: var(--text);
+  box-shadow: inset 2px 0 0 0 var(--accent);
+  margin-inline: calc(var(--code-pad) * -1);
+  padding-inline: var(--code-pad);
+}
+
+.tk-c { color: var(--code-comment); }
+.tk-s { color: var(--code-literal); }
+.tk-f { color: var(--code-flag); }
+
+/* Figure / image */
+.figure {
+  margin-inline: 0;
+}
+
+.figure img {
+  width: 100%;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+}
+
+.figure figcaption,
+.code figcaption {
+  margin-top: var(--sp-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  color: var(--text-faint);
+  line-height: 1.45;
+}
+
+/* The code caption lives inside the bordered box, so it needs its own inset
+   and a rule to separate it from the code above. */
+.code figcaption {
+  margin-top: 0;
+  padding: var(--sp-2) var(--code-pad) var(--sp-3);
+  border-top: 1px solid var(--rule);
+}
+
+/* Table — must scroll in its own container, never the page. */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+}
+
+.post__body table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: var(--fs-meta);
+  font-size-adjust: 0.52;
+  line-height: 1.45;
+}
+
+.post__body th,
+.post__body td {
+  text-align: left;
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.post__body thead th {
+  background: var(--bg-code-bar);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.post__body tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* End block */
+.post__end {
+  max-width: var(--measure);
+  margin: var(--sp-8) auto 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  padding: var(--sp-5);
+  color: var(--text-dim);
+}
+
+/* The smaller size goes on the text, not the box: `ch` resolves against the
+   element's own font-size, so sizing the box down would make its 68ch measure
+   ~10% narrower than the text column it has to align with. */
+.post__end p {
+  font-size: var(--fs-ui);
+}
+
+.post__end p + p {
+  margin-top: var(--sp-3);
+}
+
+/* --- 404 ------------------------------------------------------------------ */
+
+.notfound {
+  padding-block: var(--sp-10) var(--sp-9);
+  max-width: 52ch;
+}
+
+.notfound h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  margin-top: var(--sp-3);
+}
+
+.notfound p {
+  margin-top: var(--sp-4);
+  color: var(--text-dim);
+}
+
+/* --- Breakpoints ---------------------------------------------------------- */
+
+@media (min-width: 420px) {
+  .rail__home .rail__full {
+    display: inline;
+  }
+  .rail__home .rail__abbr {
+    display: none;
+  }
+}
+
+@media (min-width: 600px) {
+  :root {
+    --pad: 32px;
+    --fs-body: 1.125rem;
+    --fs-code: 0.875rem;
+    --fs-h1: 2.375rem;
+    --fs-h2: 1.875rem;
+    --fs-h3: 1.625rem;
+  }
+
+  .contact__row {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    column-gap: var(--sp-5);
+    align-items: baseline;
+  }
+
+  .contact dt {
+    margin-bottom: 0;
+  }
+
+  .row__link {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: var(--sp-5);
+  }
+
+  .row__date {
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 0;
+    text-align: right;
+  }
+
+  .row__title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .row__dek,
+  .row__tags {
+    grid-column: 1;
+  }
+
+  .footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .post__body th,
+  .post__body td {
+    white-space: normal;
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --pad: 48px;
+    --rail-h: 60px;
+    --fs-body: 1.1875rem;
+    --fs-code: 0.9375rem;
+    --fs-h1: 2.75rem;
+    --fs-h2: 2.125rem;
+    --fs-h3: 1.6875rem;
+    --lh-body: 1.68;
+    --code-pad: var(--sp-5);
+  }
+
+  .masthead {
+    padding-block: var(--sp-10) var(--sp-8);
+  }
+
+  .section {
+    padding-block: var(--sp-8);
+  }
+
+  /* Code and tables hang 24px outside the measure so their optical left edge
+     sits clear of the prose. */
+  .code,
+  .table-wrap {
+    margin-inline: calc(var(--sp-5) * -1);
+  }
+
+  .figure {
+    margin-inline: calc(var(--sp-5) * -1);
+  }
+
+  .figure figcaption {
+    padding-inline: var(--sp-5);
+  }
+}
+
+/* Hanging section numbers only where there is genuinely room for them:
+   1080px − 96px padding = 984px content, 68ch ≈ 645px centred leaves ~170px. */
+@media (min-width: 1080px) {
+  .post__body h2 .num {
+    position: absolute;
+    left: -3.75rem;
+    top: 0.55em;
+    margin-bottom: 0;
+    width: 3rem;
+    text-align: right;
+  }
+}
+
+/* --- Motion --------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .progress {
+    display: none;
+  }
+}
+
+/* --- Print ---------------------------------------------------------------- */
+
+@media print {
+  /* Re-point the tokens rather than overriding body alone — every component
+     reads through var(), so one block recolours the whole page. Without this
+     the code figures and .note lead-ins print near-white on white. */
+  :root {
+    --bg: #fff;
+    --bg-raised: #f6f5f2;
+    --bg-code: #f6f5f2;
+    --bg-code-bar: #eceae5;
+    --rule: #bbb;
+    --rule-strong: #999;
+    --text: #000;
+    --text-dim: #333;
+    --text-faint: #555;
+    --accent: #8a5a12;
+    --accent-underline: #8a5a12;
+    --mark-bg: #f4e6c8;
+    --code-comment: #555;
+    --code-literal: #333;
+    --code-flag: #333;
+  }
+
+  .rail,
+  .progress,
+  .toc,
+  .code__copy,
+  .skip-link {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  /* Code and highlight fills carry meaning, so keep them when the browser's
+     "background graphics" setting is off. */
+  .code,
+  .code__bar,
+  .code mark,
+  .post__end {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .post__body h2,
+  .post__body h3 {
+    break-after: avoid;
+  }
+
+  .code,
+  .figure,
+  .table-wrap {
+    break-inside: avoid;
+  }
+}

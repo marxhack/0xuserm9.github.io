@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Writeups — Daffa Ilham Ramadan</title>
+    <meta
+      name="description"
+      content="Writeups and notes on web application security by Daffa Ilham Ramadan."
+    />
+    <link rel="canonical" href="https://daffailhamramadan.github.io/writeups/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Writeups — Daffa Ilham Ramadan" />
+    <meta
+      property="og:description"
+      content="Writeups and notes on web application security."
+    />
+    <meta
+      property="og:url"
+      content="https://daffailhamramadan.github.io/writeups/"
+    />
+    <meta name="twitter:card" content="summary" />
+    <link rel="stylesheet" href="/assets/style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <nav class="rail" aria-label="Primary">
+      <div class="rail__inner container">
+        <a class="rail__home" href="/">
+          <span class="rail__full">Daffa Ilham Ramadan</span>
+          <span class="rail__abbr">DIR</span>
+        </a>
+        <div class="rail__nav">
+          <a href="/writeups/" aria-current="page">Writeups</a>
+          <a href="mailto:izukudaffa@gmail.com">Email</a>
+        </div>
+      </div>
+    </nav>
+
+    <main id="main">
+      <header class="page-head container">
+        <p class="eyebrow">Archive</p>
+        <h1>Writeups</h1>
+        <p class="page-head__dek">
+          Notes on web application security — what broke, why it broke, and what
+          I would check first next time.
+        </p>
+      </header>
+
+      <div class="section container">
+        <ul class="rows">
+          <li class="row">
+            <!-- aria-labelledby keeps the link's accessible name to the title
+                 alone; the date, dek and tags still read as ordinary content. -->
+            <a
+              class="row__link"
+              href="/writeups/sample-post.html"
+              aria-labelledby="wu-sample-title"
+            >
+              <span class="row__date">
+                <time datetime="2026-07-27">27 Jul 2026</time>
+              </span>
+              <span class="row__title" id="wu-sample-title"
+                >Lorem ipsum dolor sit amet</span
+              >
+              <span class="row__dek">
+                Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                nostrud exercitation ullamco.
+              </span>
+              <span class="row__tags" role="list">
+                <span role="listitem">Lorem</span>
+                <span role="listitem">Ipsum</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+
+        <p class="empty-note">
+          More to come. New writeups are added here as they are finished.
+        </p>
+      </div>
+    </main>
+
+    <footer class="footer container">
+      <span>&copy; <span data-year>2026</span> Daffa Ilham Ramadan</span>
+      <span><a href="/">Home</a></span>
+    </footer>
+
+    <script src="/assets/main.js" defer></script>
+  </body>
+</html>
