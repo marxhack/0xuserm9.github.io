@@ -89,7 +89,7 @@
           <p class="post__dek">Exploiting a JWE implementation flaw caused by an exposed RSA public key to forge administrator tokens.</p>
           <p class="post__meta">
             <time datetime="2026-03-15">15 March 2026</time>
-            <span>4 min read</span>
+            <span>3 min read</span>
             <span>CTF · Web Security · JWE · Cryptography</span>
           </p>
         </header>
@@ -114,7 +114,6 @@
             <img src="https://0xuserm9.vercel.app/images/bankk/UTCTF.png" alt="UTCTF 2026 - Break the Bank" loading="lazy" decoding="async">
             <figcaption>UTCTF 2026 - Break the Bank</figcaption>
           </figure>
-          <h1 id="break-the-bank-utctf-2026">Break the Bank — UTCTF 2026</h1>
           <h2 id="challenge-information"><span class="num">01</span>Challenge Information</h2>
           <div class="table-wrap">
           <table>
@@ -155,8 +154,7 @@
           <hr />
           <h2 id="tldr"><span class="num">02</span>TL;DR</h2>
           <p>A publicly accessible RSA key was leaked through directory listing.</p>
-          <p>The application used <strong>JWE</strong> instead of signed <strong>JWTs</strong>, assuming that successful decryption implied authenticity.</p>
-          <p>By encrypting our own payload:</p>
+          <p>The application used <strong>JWE</strong> By encrypting our own payload:</p>
           <figure class="code">
             <div class="code__bar">
               <span>json</span>
@@ -355,12 +353,7 @@ plaintext = json.dumps(
 # print(token)
 </code></pre>
           </figure>
-          <p>No brute force.</p>
-          <p>No cryptographic attack.</p>
-          <p>Just using the application exactly as designed.</p>
-          <hr />
           <h2 id="retrieving-the-flag"><span class="num">08</span>Retrieving the Flag</h2>
-          <p>Replacing the session cookie with our forged JWE immediately granted administrator access.</p>
           <figure class="code">
             <div class="code__bar">
               <span>bash</span>
