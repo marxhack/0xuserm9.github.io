@@ -1,5 +1,5 @@
 ---
-title: "UTCTF 2026 - Break the Bank Writeup | JWE Authentication Bypass"
+title: "UTCTF 2026 - Break the Bank Writeup"
 date: 2026-03-15
 description: "Exploiting a JWE implementation flaw caused by an exposed RSA public key to forge administrator tokens."
 tags:
