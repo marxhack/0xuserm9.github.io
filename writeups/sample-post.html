@@ -29,6 +29,11 @@
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
+    <!-- Ambient background. Decorative only: aria-hidden, pointer-events:none,
+         pauses off-tab, and renders a single still frame under
+         prefers-reduced-motion. Nothing depends on it. -->
+    <div class="bg" aria-hidden="true"><canvas></canvas></div>
+
     <div class="progress" role="presentation"></div>
 
     <nav class="rail" aria-label="Primary">

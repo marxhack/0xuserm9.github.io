@@ -78,6 +78,13 @@ directly — every internal link is root-relative (`/assets/style.css`), so
   hidden until JS enables it.
 - `main.js` also sets `tabindex="0"` on scrollable code blocks and tables so
   they are keyboard-scrollable — you do not need to write it into each post.
+- **Ambient background.** A fixed `<canvas>` behind everything draws drifting
+  nodes that link up when they come close. It is decorative: `aria-hidden`,
+  `pointer-events: none`, stops when the tab is hidden, and renders a single
+  still frame under `prefers-reduced-motion`. Deliberately faint — line alpha
+  peaks at `0.085` — so it stays under long-form reading. To make it denser,
+  raise the node count in the `background()` block; to slow it, shrink `vx`/`vy`.
+  Removing the `.bg` div from a page removes it from that page.
 - **Printing is supported.** The print block re-points the colour tokens rather
   than overriding `body`, so code figures and callouts stay legible on paper.
 

@@ -126,8 +126,27 @@ button {
 
 /* --- Base ----------------------------------------------------------------- */
 
-body {
+/* The ground lives on <html> and body is transparent, so the fixed
+   background canvas at z-index -1 is not painted over by body's own fill. */
+html {
   background: var(--bg);
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.bg canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: transparent;
   color: var(--text);
   font-family: var(--font-serif);
   font-size: var(--fs-body);
@@ -1092,10 +1111,12 @@ main > .section:last-child {
   .progress,
   .toc,
   .code__copy,
-  .skip-link {
+  .skip-link,
+  .bg {
     display: none !important;
   }
 
+  html,
   body {
     background: #fff;
     color: #000;
