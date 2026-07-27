@@ -465,15 +465,16 @@ main > .section:last-child {
   margin: 0;
   display: flex;
   align-items: center;
-  gap: var(--sp-2);
+  gap: var(--sp-3);
 }
 
-/* 20px icon + 8px padding = a 36px hit area, comfortably over the 24px
-   minimum for a pointer target. */
+/* These are the site's only contact affordance, so they carry full --text
+   rather than the muted footer colour — at 26px on a dark ground anything
+   dimmer disappears. 26px icon + 8px padding = a 42px hit area. */
 .social a {
   display: block;
   padding: var(--sp-2);
-  color: var(--text-faint);
+  color: var(--text);
   text-decoration: none;
   transition: color 120ms ease;
 }
@@ -485,8 +486,8 @@ main > .section:last-child {
 
 .social .icon {
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
 }
 
 /* --- Archive header ------------------------------------------------------- */
