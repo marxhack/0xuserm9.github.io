@@ -5,10 +5,8 @@ description: "Exploiting a JWE implementation flaw caused by an exposed RSA publ
 tags:
   - CTF
   - Web Security
-  - JWT
   - JWE
   - Cryptography
-  - Authentication
 category: Writeups
 author: 0xuserm9
 draft: false
