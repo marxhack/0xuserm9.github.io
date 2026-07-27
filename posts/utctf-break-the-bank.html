@@ -52,7 +52,7 @@
         "url": "https://daffailhamramadan.com/"
       },
       "description": "Exploiting a JWE implementation flaw caused by an exposed RSA public key to forge administrator tokens.",
-      "keywords": "CTF, Web Security, JWT, JWE, Cryptography, Authentication"
+      "keywords": "CTF, Web Security, JWE, Cryptography"
     }
     </script>
     <script
@@ -90,7 +90,7 @@
           <p class="post__meta">
             <time datetime="2026-03-15">15 March 2026</time>
             <span>4 min read</span>
-            <span>CTF · Web Security · JWT · JWE · Cryptography · Authentication</span>
+            <span>CTF · Web Security · JWE · Cryptography</span>
           </p>
         </header>
 
@@ -115,9 +115,6 @@
             <figcaption>UTCTF 2026 - Break the Bank</figcaption>
           </figure>
           <h1 id="break-the-bank-utctf-2026">Break the Bank — UTCTF 2026</h1>
-          <p>One of my favorite web challenges from <strong>UTCTF 2026</strong>. At first glance it looked like a classic banking application, but the real vulnerability wasn't hidden inside complicated business logic—it came from a fundamental misunderstanding of how <strong>JWE</strong> works.</p>
-          <p>The application encrypted authentication tokens using <strong>RSA-OAEP-256</strong> and <strong>AES-GCM</strong>, but accidentally exposed its <strong>public key</strong> through an indexed directory. Since anyone can encrypt data with a public key, this allowed attackers to generate completely new authentication tokens that the server happily accepted as legitimate.</p>
-          <hr />
           <h2 id="challenge-information"><span class="num">01</span>Challenge Information</h2>
           <div class="table-wrap">
           <table>
@@ -328,13 +325,6 @@ OQIDAQAB
 from joserfc.jwk import RSAKey
 from joserfc.jwe import JWERegistry
 import json
-
-# Load the exposed public key
-
-# In the CTF, you'd save it as key.pem locally
-
-# with open(&quot;key.pem&quot;, &quot;rb&quot;) as f:
-#     key = RSAKey.import_key(f.read())
 
 registry = JWERegistry(
     algorithms=[&quot;RSA-OAEP-256&quot;, &quot;A256GCM&quot;]
