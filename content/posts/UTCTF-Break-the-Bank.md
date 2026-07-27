@@ -31,9 +31,7 @@ draft: false
 
 A publicly accessible RSA key was leaked through directory listing.
 
-The application used **JWE** instead of signed **JWTs**, assuming that successful decryption implied authenticity.
-
-By encrypting our own payload:
+The application used **JWE** By encrypting our own payload:
 
 ```json
 {"sub":"admin"}
@@ -220,18 +218,7 @@ plaintext = json.dumps(
 
 # print(token)
 ```
-
-No brute force.
-
-No cryptographic attack.
-
-Just using the application exactly as designed.
-
----
-
 ## Retrieving the Flag
-
-Replacing the session cookie with our forged JWE immediately granted administrator access.
 
 ```bash
 curl -s \
