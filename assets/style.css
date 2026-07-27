@@ -305,6 +305,110 @@ a:hover {
   max-width: 20ch;
 }
 
+/* Typed masthead. Every letter ships in the markup already laid out and only
+   its visibility flips, so the line holds its final width from the first
+   frame — the name types itself without the avatar above or the bio below
+   moving a pixel. The h1 carries the name on aria-label and the letters are
+   aria-hidden, so assistive tech announces a name rather than 17 fragments. */
+.type {
+  /* One keystroke. Every delay below is a multiple of it, so this is the
+     single knob for the whole effect. */
+  --type-step: 60ms;
+}
+
+/* Each letter is inline-block, which turns every seam between them into a
+   line-break opportunity. Words hold themselves together so the name can only
+   ever break where there is a real space. */
+.type__word {
+  white-space: nowrap;
+}
+
+.type__word > span {
+  display: inline-block;
+  visibility: hidden;
+  animation: type-key 45ms
+    calc(var(--type-base) + var(--type-key) * var(--type-step)) forwards;
+}
+
+/* A word starts one step after the previous one ends — that spare step is the
+   space bar. Word 1 leads in at 2 steps; 5 letters + space = 6 steps each. */
+.type__word:nth-child(1) {
+  --type-base: calc(var(--type-step) * 2);
+}
+
+.type__word:nth-child(2) {
+  --type-base: calc(var(--type-step) * 8);
+}
+
+.type__word:nth-child(3) {
+  --type-base: calc(var(--type-step) * 14);
+}
+
+.type__word > span:nth-child(1) {
+  --type-key: 0;
+}
+
+.type__word > span:nth-child(2) {
+  --type-key: 1;
+}
+
+.type__word > span:nth-child(3) {
+  --type-key: 2;
+}
+
+.type__word > span:nth-child(4) {
+  --type-key: 3;
+}
+
+.type__word > span:nth-child(5) {
+  --type-key: 4;
+}
+
+.type__word > span:nth-child(6) {
+  --type-key: 5;
+}
+
+.type__word > span:nth-child(7) {
+  --type-key: 6;
+}
+
+/* Drawn rather than set as "|" so it keeps the same weight and height in every
+   font on the stack. Sits out the typing at opacity 0 and takes over on the
+   step after the last letter lands. */
+.type__caret {
+  display: inline-block;
+  width: 0.07em;
+  height: 0.82em;
+  margin-left: 0.1em;
+  vertical-align: -0.06em;
+  background: var(--accent);
+  opacity: 0;
+  animation: type-caret 1.06s step-end calc(var(--type-step) * 21) infinite;
+}
+
+@keyframes type-key {
+  from {
+    visibility: visible;
+    opacity: 0;
+  }
+
+  to {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@keyframes type-caret {
+  from,
+  to {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
 /* The one-line bio. Set below the name rather than as a second headline —
    quieter than the name, so the two do not compete. */
 .masthead__dek {
@@ -1157,6 +1261,18 @@ main > .section:last-child {
   }
 
   .progress {
+    display: none;
+  }
+
+  /* The stagger lives in animation-delay, which the blanket rule above leaves
+     alone — without this the name would still reveal itself letter by letter,
+     just with each letter popping instead of fading. */
+  .type__word > span {
+    visibility: visible;
+    animation: none;
+  }
+
+  .type__caret {
     display: none;
   }
 }

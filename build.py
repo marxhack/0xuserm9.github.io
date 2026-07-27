@@ -23,6 +23,7 @@ worse than one that refuses to run.
 """
 
 import os
+import json
 import re
 import shutil
 import subprocess
@@ -42,9 +43,13 @@ ASSETS_POSTS = ROOT / "assets" / "posts"
 TEMPLATE = ROOT / "templates" / "post.html"
 HOME_PAGE = ROOT / "index.html"
 MANIFEST = ROOT / ".build-manifest"
+FEED = ROOT / "feed.xml"
+SITEMAP = ROOT / "sitemap.xml"
+ROBOTS = ROOT / "robots.txt"
 
 SITE = "https://daffailhamramadan.github.io"
 SITE_NAME = "Daffa Ilham Ramadan"
+AUTHOR_EMAIL = "daffailhamramadan127@gmail.com"
 X_HANDLE = "@FroztNova127"
 RECENT_ON_HOME = 5
 WORDS_PER_MINUTE = 220
@@ -627,6 +632,125 @@ def og_image_tags(post):
     return "\n" + "\n".join("    " + t for t in tags)
 
 
+# Every profile the site already links to. sameAs is how a search engine ties
+# these identities to one person.
+SAME_AS = [
+    "https://github.com/daffailhamramadan",
+    "https://www.linkedin.com/in/daffa-ilham-ramadan/",
+    "https://x.com/FroztNova127",
+    "https://hackerone.com/daffailhamramadan",
+    "https://app.intigriti.com/profile/daffailhamramadan127",
+    "https://yeswehack.com/hunters/daffailhamramadan127",
+    "https://bugcrowd.com/h/daffailhamramadan127",
+]
+
+
+def json_ld(post):
+    """BlogPosting + its author. json.dumps handles all escaping, so a title
+    with a quote or a backslash cannot break out of the script block."""
+    node = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post["title"],
+        "url": f"{SITE}/posts/{post['slug']}.html",
+        "mainEntityOfPage": {"@type": "WebPage", "@id": f"{SITE}/posts/{post['slug']}.html"},
+        "datePublished": post["date"].isoformat(),
+        "dateModified": post["date"].isoformat(),
+        "inLanguage": "en",
+        "author": {
+            "@type": "Person",
+            "name": SITE_NAME,
+            "url": SITE + "/",
+            "sameAs": SAME_AS,
+        },
+        "publisher": {"@type": "Person", "name": SITE_NAME, "url": SITE + "/"},
+    }
+    if post["description"]:
+        node["description"] = post["description"]
+    if post["tags"]:
+        node["keywords"] = ", ".join(post["tags"])
+    if post["cover"]:
+        node["image"] = SITE + post["cover"]
+
+    body = json.dumps(node, indent=2, ensure_ascii=False)
+    # A literal </script> inside a JSON string would close the block early.
+    body = body.replace("</", "<\\/")
+    return ('\n    <script type="application/ld+json">\n'
+            + "\n".join("    " + ln for ln in body.splitlines())
+            + "\n    </script>")
+
+
+def write_feed(posts):
+    """Atom. Full content, because a feed that only teases is a worse feed."""
+    stamp = (
+        max(p["date"] for p in posts).isoformat() + "T00:00:00Z"
+        if posts else "1970-01-01T00:00:00Z"
+    )
+    out = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        '<feed xmlns="http://www.w3.org/2005/Atom">',
+        f"  <title>{esc(SITE_NAME)}</title>",
+        f"  <subtitle>Security research, notes, and everything else.</subtitle>",
+        f'  <link href="{SITE}/feed.xml" rel="self" type="application/atom+xml"/>',
+        f'  <link href="{SITE}/" rel="alternate" type="text/html"/>',
+        f"  <id>{SITE}/</id>",
+        f"  <updated>{stamp}</updated>",
+        "  <author>",
+        f"    <name>{esc(SITE_NAME)}</name>",
+        f"    <email>{AUTHOR_EMAIL}</email>",
+        f"    <uri>{SITE}/</uri>",
+        "  </author>",
+    ]
+    for post in posts:
+        url = f"{SITE}/posts/{post['slug']}.html"
+        when = post["date"].isoformat() + "T00:00:00Z"
+        out += [
+            "  <entry>",
+            f"    <title>{esc(post['title'])}</title>",
+            f'    <link href="{url}" rel="alternate" type="text/html"/>',
+            f"    <id>{url}</id>",
+            f"    <published>{when}</published>",
+            f"    <updated>{when}</updated>",
+        ]
+        if post["description"]:
+            out.append(f"    <summary>{esc(post['description'])}</summary>")
+        for tag in post["tags"]:
+            out.append(f'    <category term="{esc(tag)}"/>')
+        out.append(
+            '    <content type="html">' + esc(post["html"]) + "</content>"
+        )
+        out.append("  </entry>")
+    out.append("</feed>")
+    FEED.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+
+def write_sitemap(posts):
+    urls = [(SITE + "/", None), (SITE + "/posts/", None)]
+    urls += [(f"{SITE}/posts/{p['slug']}.html", p["date"].isoformat()) for p in posts]
+    out = ['<?xml version="1.0" encoding="utf-8"?>',
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    newest = max((p["date"] for p in posts), default=None)
+    for loc, lastmod in urls:
+        out.append("  <url>")
+        out.append(f"    <loc>{loc}</loc>")
+        stamp = lastmod or (newest.isoformat() if newest else None)
+        if stamp:
+            out.append(f"    <lastmod>{stamp}</lastmod>")
+        out.append("  </url>")
+    out.append("</urlset>")
+    SITEMAP.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+
+def write_robots():
+    ROBOTS.write_text(
+        "User-agent: *\n"
+        "Allow: /\n"
+        "\n"
+        f"Sitemap: {SITE}/sitemap.xml\n",
+        encoding="utf-8",
+    )
+
+
 PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
 
 
@@ -657,6 +781,7 @@ def write_post(post, template):
         "ANALYTICS": f"\n{beacon}" if beacon else "",
         "COVER": cover_figure(post),
         "TWITTER_CARD": "summary_large_image" if post["cover"] else "summary",
+        "JSONLD": json_ld(post),
         "TOC": post["toc"],
         "BODY": indent(post["html"], 10),
         # Only what the author actually wrote. A default sign-off reads as
@@ -837,6 +962,13 @@ def main():
         if ANALYTICS_TOKEN
         else "  · analytics                   ANALYTICS_TOKEN is empty, no beacon"
     )
+
+    write_feed(posts)
+    write_sitemap(posts)
+    write_robots()
+    print(f"  ✓ feed.xml                    {len(posts)} entr(y/ies)")
+    print(f"  ✓ sitemap.xml                 {len(posts) + 2} url(s)")
+    print("  ✓ robots.txt")
 
     n = copy_attachments()
     if n:
