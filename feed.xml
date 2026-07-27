@@ -2,19 +2,19 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Daffa Ilham Ramadan</title>
   <subtitle>Security research, notes, and everything else.</subtitle>
-  <link href="https://daffailhamramadan.github.io/feed.xml" rel="self" type="application/atom+xml"/>
-  <link href="https://daffailhamramadan.github.io/" rel="alternate" type="text/html"/>
-  <id>https://daffailhamramadan.github.io/</id>
+  <link href="https://daffailhamramadan.com/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://daffailhamramadan.com/" rel="alternate" type="text/html"/>
+  <id>https://daffailhamramadan.com/</id>
   <updated>2026-07-27T00:00:00Z</updated>
   <author>
     <name>Daffa Ilham Ramadan</name>
     <email>daffailhamramadan127@gmail.com</email>
-    <uri>https://daffailhamramadan.github.io/</uri>
+    <uri>https://daffailhamramadan.com/</uri>
   </author>
   <entry>
     <title>My first blog post</title>
-    <link href="https://daffailhamramadan.github.io/posts/first-post.html" rel="alternate" type="text/html"/>
-    <id>https://daffailhamramadan.github.io/posts/first-post.html</id>
+    <link href="https://daffailhamramadan.com/posts/first-post.html" rel="alternate" type="text/html"/>
+    <id>https://daffailhamramadan.com/posts/first-post.html</id>
     <published>2026-07-27T00:00:00Z</published>
     <updated>2026-07-27T00:00:00Z</updated>
     <summary>What this site is for, and what I plan to put on it.</summary>

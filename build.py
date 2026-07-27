@@ -47,7 +47,7 @@ FEED = ROOT / "feed.xml"
 SITEMAP = ROOT / "sitemap.xml"
 ROBOTS = ROOT / "robots.txt"
 
-SITE = "https://daffailhamramadan.github.io"
+SITE = "https://daffailhamramadan.com"
 SITE_NAME = "Daffa Ilham Ramadan"
 AUTHOR_EMAIL = "daffailhamramadan127@gmail.com"
 X_HANDLE = "@FroztNova127"

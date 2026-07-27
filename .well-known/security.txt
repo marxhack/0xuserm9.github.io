@@ -1,7 +1,7 @@
 Contact: mailto:daffailhamramadan127@gmail.com
 Expires: 2027-07-27T00:00:00Z
 Preferred-Languages: en, id
-Canonical: https://daffailhamramadan.github.io/.well-known/security.txt
+Canonical: https://daffailhamramadan.com/.well-known/security.txt
 
 # Bounty: $1. Paid in person, in cash, if I ever meet you.
 # Out of scope: everything, because I own none of it.
