@@ -743,9 +743,20 @@ main > .section:last-child {
   color: var(--text-dim);
 }
 
-.note b {
+/* Markdown emits <strong>, hand-written HTML uses <b> — cover both. */
+.note b,
+.note strong {
   color: var(--text);
   font-weight: 600;
+}
+
+.note p + p {
+  margin-top: var(--sp-2);
+}
+
+/* warning / caution / danger callouts */
+.note--warn {
+  border-left-color: var(--code-flag);
 }
 
 /* Code figure */

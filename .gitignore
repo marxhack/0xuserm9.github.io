@@ -1,6 +1,10 @@
 .DS_Store
-Thumbs.db
-*.log
-node_modules/
-.vscode/
 .idea/
+.venv/
+.vscode/
+*.log
+content/.obsidian/cache
+content/.obsidian/workspace-mobile.json
+content/.obsidian/workspace.json
+node_modules/
+Thumbs.db
