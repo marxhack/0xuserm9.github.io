@@ -15,7 +15,8 @@ Live at <https://daffailhamramadan.github.io>
 ├── .nojekyll                   stops Pages running Jekyll over these files
 ├── assets/
 │   ├── style.css               the whole design system
-│   └── main.js                 progressive enhancement only
+│   ├── main.js                 progressive enhancement only
+│   └── avatar.jpg              self-hosted copy of the GitHub avatar
 └── writeups/
     ├── index.html              archive listing
     └── sample-post.html        template post (lorem ipsum — replace it)
@@ -79,6 +80,20 @@ directly — every internal link is root-relative (`/assets/style.css`), so
   they are keyboard-scrollable — you do not need to write it into each post.
 - **Printing is supported.** The print block re-points the colour tokens rather
   than overriding `body`, so code figures and callouts stay legible on paper.
+
+## Avatar
+
+`assets/avatar.jpg` is a self-hosted copy of the GitHub avatar, not a hotlink —
+hotlinking would send every visitor to `avatars.githubusercontent.com`. That
+means it does not update automatically. After changing your picture on GitHub:
+
+```bash
+curl -sL "https://avatars.githubusercontent.com/u/64750699?s=512&v=4" \
+  -o assets/avatar.jpg
+```
+
+The circular frame is drawn with layered `box-shadow` rings, so any square
+image works — no cropping needed before you drop it in.
 
 ## Licence
 

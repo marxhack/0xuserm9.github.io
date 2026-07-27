@@ -119,6 +119,7 @@ button {
   --container: 1120px;
   --pad: 20px;
   --rail-h: 52px;
+  --avatar-size: 96px;
 
   color-scheme: dark;
 }
@@ -252,6 +253,20 @@ a:hover {
 
 .masthead {
   padding-block: var(--sp-9) var(--sp-7);
+}
+
+/* Circular frame. Two hairlines with the page colour between them, so the
+   ring reads as the same drawn rule the rest of the site is built from
+   rather than as a glow — and it holds the bright avatar off the near-black
+   ground without a heavy border. */
+.masthead__avatar {
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: var(--sp-6);
+  box-shadow: 0 0 0 1px var(--rule-strong), 0 0 0 6px var(--bg),
+    0 0 0 7px var(--rule);
 }
 
 .masthead__name {
@@ -978,6 +993,7 @@ a:hover {
     --fs-h3: 1.6875rem;
     --lh-body: 1.68;
     --code-pad: var(--sp-5);
+    --avatar-size: 112px;
   }
 
   .masthead {
@@ -1079,6 +1095,13 @@ a:hover {
   .post__end {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+
+  /* The ring is drawn with box-shadow, which browsers drop when background
+     graphics are off. Fall back to a real border on paper. */
+  .masthead__avatar {
+    box-shadow: none;
+    border: 1px solid #999;
   }
 
   .post__body h2,
