@@ -32,18 +32,10 @@
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- Ambient background. Decorative only: aria-hidden, pointer-events:none,
-         pauses off-tab, and renders a single still frame under
-         prefers-reduced-motion. Nothing depends on it. -->
     <div class="bg" aria-hidden="true"><canvas></canvas></div>
 
     <main id="main">
-      <!-- ── Masthead ──────────────────────────────────────────────────── -->
       <header class="masthead container">
-        <!-- Self-hosted copy of the GitHub avatar. Deliberately not hotlinked
-             from avatars.githubusercontent.com, which would send every visitor
-             to a third party. Refresh it with:
-             curl -sL "https://avatars.githubusercontent.com/u/64750699?s=512&v=4" -o assets/avatar.jpg -->
         <img
           class="masthead__avatar"
           src="/assets/avatar.jpg"
@@ -59,9 +51,6 @@
           Security researcher, working mostly on web application security.
         </p>
 
-        <!-- Bug bounty profiles. Wordmarks rather than logos: HackerOne and
-             YesWeHack ship no usable monochrome vector, and mixing their
-             full-colour rasters in would clash with the footer icon row. -->
         <ul class="profiles">
           <li>
             <a href="https://hackerone.com/daffailhamramadan" rel="me"
@@ -90,7 +79,6 @@
 
       <hr class="masthead__rule" />
 
-      <!-- ── Recent posts ─────────────────────────────────────────── -->
       <section class="section container" aria-labelledby="recent-heading">
         <div class="section__head">
           <h2 class="eyebrow" id="recent-heading">Recent posts</h2>
@@ -122,8 +110,6 @@
     <footer class="footer container">
       <span>&copy; <span data-year>2026</span> Daffa Ilham Ramadan</span>
 
-      <!-- Icon-only links. Each carries its label in a .visually-hidden span,
-           so it still has an accessible name and is announced correctly. -->
       <ul class="social">
         <li>
           <a href="mailto:daffailhamramadan127@gmail.com">
