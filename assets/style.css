@@ -368,7 +368,7 @@ main > .section:last-child {
   color: var(--text-dim);
 }
 
-/* --- Writeup rows --------------------------------------------------------- */
+/* --- Post rows --------------------------------------------------------- */
 
 .rows {
   list-style: none;

@@ -20,10 +20,17 @@
 
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     var LINK_DIST = 150;
+    var CURSOR_DIST = 210;
+    var LEAN = 0.16;
     var nodes = [];
     var w = 0;
     var h = 0;
     var raf = null;
+
+    /* Pointer state. `sx`/`sy` chase the raw position so the pull trails the
+       cursor instead of snapping to it, and `strength` fades the whole effect
+       in and out rather than switching it. */
+    var ptr = { x: 0, y: 0, sx: 0, sy: 0, strength: 0, target: 0, seen: false };
 
     var build = function () {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -49,8 +56,17 @@
     var draw = function () {
       ctx.clearRect(0, 0, w, h);
 
-      var i, j, a, b, dx, dy, d;
+      var i, j, a, b, dx, dy, d, f;
 
+      /* Ease the pointer and its influence. */
+      ptr.strength += (ptr.target - ptr.strength) * 0.07;
+      ptr.sx += (ptr.x - ptr.sx) * 0.12;
+      ptr.sy += (ptr.y - ptr.sy) * 0.12;
+      var pull = ptr.seen ? ptr.strength : 0;
+
+      /* Drift the base positions, then derive a render position that leans
+         toward the cursor. Leaning the render position rather than nudging
+         velocity means nodes spring back and can never clump permanently. */
       for (i = 0; i < nodes.length; i++) {
         a = nodes[i];
         a.x += a.vx;
@@ -59,15 +75,33 @@
         else if (a.x > w + 40) a.x = -40;
         if (a.y < -40) a.y = h + 40;
         else if (a.y > h + 40) a.y = -40;
+
+        a.rx = a.x;
+        a.ry = a.y;
+        a.near = 0;
+
+        if (pull > 0.001) {
+          dx = ptr.sx - a.x;
+          dy = ptr.sy - a.y;
+          d = Math.sqrt(dx * dx + dy * dy);
+          if (d < CURSOR_DIST && d > 0.5) {
+            a.near = 1 - d / CURSOR_DIST;
+            f = a.near * LEAN * pull;
+            a.rx += dx * f;
+            a.ry += dy * f;
+          }
+        }
       }
 
       ctx.lineWidth = 1;
+
+      /* Node-to-node links. */
       for (i = 0; i < nodes.length; i++) {
         a = nodes[i];
         for (j = i + 1; j < nodes.length; j++) {
           b = nodes[j];
-          dx = a.x - b.x;
-          dy = a.y - b.y;
+          dx = a.rx - b.rx;
+          dy = a.ry - b.ry;
           if (dx > LINK_DIST || dx < -LINK_DIST || dy > LINK_DIST || dy < -LINK_DIST) {
             continue;
           }
@@ -76,17 +110,41 @@
           ctx.strokeStyle =
             "rgba(240,179,87," + (0.085 * (1 - d / LINK_DIST)).toFixed(3) + ")";
           ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
+          ctx.moveTo(a.rx, a.ry);
+          ctx.lineTo(b.rx, b.ry);
           ctx.stroke();
         }
       }
 
-      ctx.fillStyle = "rgba(233,230,224,0.20)";
+      /* Links to the cursor itself — brighter, so the pointer reads as the
+         hub of whatever it is near. */
+      if (pull > 0.001) {
+        for (i = 0; i < nodes.length; i++) {
+          a = nodes[i];
+          dx = ptr.sx - a.rx;
+          dy = ptr.sy - a.ry;
+          if (dx > CURSOR_DIST || dx < -CURSOR_DIST || dy > CURSOR_DIST || dy < -CURSOR_DIST) {
+            continue;
+          }
+          d = Math.sqrt(dx * dx + dy * dy);
+          if (d >= CURSOR_DIST) continue;
+          ctx.strokeStyle =
+            "rgba(240,179,87," +
+            (0.2 * (1 - d / CURSOR_DIST) * pull).toFixed(3) +
+            ")";
+          ctx.beginPath();
+          ctx.moveTo(a.rx, a.ry);
+          ctx.lineTo(ptr.sx, ptr.sy);
+          ctx.stroke();
+        }
+      }
+
       for (i = 0; i < nodes.length; i++) {
         a = nodes[i];
+        ctx.fillStyle =
+          "rgba(233,230,224," + (0.2 + 0.25 * pull * (a.near || 0)).toFixed(3) + ")";
         ctx.beginPath();
-        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+        ctx.arc(a.rx, a.ry, a.r, 0, Math.PI * 2);
         ctx.fill();
       }
     };
@@ -134,6 +192,33 @@
     document.addEventListener("visibilitychange", function () {
       if (document.hidden) stop();
       else if (!reduced.matches) start();
+    });
+
+    /* Mouse only. Touch would fire once on tap and leave the pull stranded
+       where the finger last was, which reads as a bug rather than an effect. */
+    window.addEventListener(
+      "pointermove",
+      function (e) {
+        if (e.pointerType === "touch") return;
+        if (!ptr.seen) {
+          ptr.sx = e.clientX;
+          ptr.sy = e.clientY;
+          ptr.seen = true;
+        }
+        ptr.x = e.clientX;
+        ptr.y = e.clientY;
+        ptr.target = 1;
+      },
+      { passive: true }
+    );
+
+    /* relatedTarget === null means the pointer left the window entirely. */
+    document.addEventListener("pointerout", function (e) {
+      if (!e.relatedTarget) ptr.target = 0;
+    });
+
+    window.addEventListener("blur", function () {
+      ptr.target = 0;
     });
 
     if (reduced.addEventListener) reduced.addEventListener("change", sync);
