@@ -92,8 +92,13 @@ curl -sL "https://avatars.githubusercontent.com/u/64750699?s=512&v=4" \
   -o assets/avatar.jpg
 ```
 
-The circular frame is drawn with layered `box-shadow` rings, so any square
-image works — no cropping needed before you drop it in.
+The circular frame is `border-radius: 50%` plus `object-fit: cover`, so any
+square image works — no cropping needed before you drop it in. Size comes from
+the `--avatar-size` token (112px, 132px from 900px up).
+
+The ring is a solid 3px `--text` border, not one of the `--rule` tokens. Those
+sit at 1.26:1 against the background on purpose — fine for a long hairline
+between rows, invisible once bent into a small circle.
 
 ## Licence
 
