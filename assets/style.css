@@ -62,30 +62,30 @@ button {
 /* --- Tokens --------------------------------------------------------------- */
 
 :root {
-  /* Surfaces. Separated by hairlines first, fill second. */
-  --bg: #0a0a0f;
-  --bg-raised: #16161f;
-  --bg-code: #101018;
-  --bg-code-bar: #14141f;
+  /* Surfaces - Deep black with slight green tints */
+  --bg: #050505;
+  --bg-raised: #0a0f0a;
+  --bg-code: #050805;
+  --bg-code-bar: #0a0f0a;
 
-  --rule: #22222d;
-  --rule-strong: #33333f;
+  --rule: #112211;
+  --rule-strong: #1a331a;
 
-  /* Warm off-white, not pure white: pure white halates at a 68ch measure. */
-  --text: #e9e6e0;
-  --text-dim: #a6a29b;
-  --text-faint: #8b8880;
+  /* Crisp terminal off-white and dimmed greens */
+  --text: #e8f5e9;
+  --text-dim: #81c784;
+  --text-faint: #4caf50;
 
-  /* One accent. Amber, deliberately not the template blue/violet. */
-  --accent: #f0b357;
-  --accent-deep: #b2603a;
-  --accent-underline: rgba(240, 179, 87, 0.7); /* 5.55:1 on --bg */
-  --mark-bg: rgba(240, 179, 87, 0.14);
+  /* Classic terminal green accent */
+  --accent: #00e676;
+  --accent-deep: #00c853;
+  --accent-underline: rgba(0, 230, 118, 0.7); 
+  --mark-bg: rgba(0, 230, 118, 0.14);
 
-  /* Code tokens, hand-applied. */
-  --code-comment: #7f7c74;
-  --code-literal: #cbb488;
-  --code-flag: #e0a3a3;
+  /* Code tokens */
+  --code-comment: #66bb6a;
+  --code-literal: #aed581;
+  --code-flag: #ff5252;
 
   --font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4",
     "Source Serif Pro", Georgia, "Nimbus Roman No9 L", "Liberation Serif",
