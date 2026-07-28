@@ -933,14 +933,23 @@ overflow: hidden;
 }
 
 /* Code figure */
-.code{
-    border:1px solid #2d3a4b;
-    border-radius:14px;
-    overflow:hidden;
+.code {
+  margin-inline: 0;
+  position: relative;
 
-    box-shadow:
-        0 12px 40px rgba(0,0,0,.35),
-        inset 0 1px rgba(255,255,255,.02);
+  background: var(--bg-code);
+  border: 1px solid var(--rule);
+
+  border-radius: 14px;
+  overflow: hidden;
+
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .code:hover {
