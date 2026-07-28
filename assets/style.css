@@ -61,30 +61,27 @@ button {
 
 /* --- Tokens --------------------------------------------------------------- */
 
-:root {
-  /* --- Pro Slate Backgrounds --- */
-  --bg: #0d1117;
-  --bg-raised: #161b22;
-  --bg-code: #10141b;
-  --bg-code-bar: #161b22;
+:root{
+  --bg:#0b0f14;
+  --bg-raised:#131922;
+  --bg-code:#0f141b;
+  --bg-code-bar:#171e28;
 
-  --rule: #30363d;
-  --rule-strong: #484f58;
+  --rule:#283241;
+  --rule-strong:#3b4b60;
 
-  --text: #e6edf3;
-  --text-dim: #8b949e;
-  --text-faint: #6e7681;
+  --text:#edf2f7;
+  --text-dim:#a3b1c2;
+  --text-faint:#738096;
 
-  /* --- Restored Yellow/Amber Accents (Matches your canvas & masthead) --- */
-  --accent: #f0b357;
-  --accent-deep: #b2603a;
-  --accent-underline: rgba(240, 179, 87, 0.7); 
-  --mark-bg: rgba(240, 179, 87, 0.14);
+  --accent:#ffbf47;
+  --accent-deep:#ff8c42;
+  --accent-underline:rgba(255,191,71,.65);
+  --mark-bg:rgba(255,191,71,.12);
 
-  /* --- Code tokens restored to match the warm yellow --- */
-  --code-comment: #7f7c74;
-  --code-literal: #cbb488;
-  --code-flag: #e0a3a3;
+  --code-comment:#738096;
+  --code-literal:#ffd580;
+  --code-flag:#ff7b72;
 
   /* --- Fonts --- */
   --font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4",
