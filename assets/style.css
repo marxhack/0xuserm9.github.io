@@ -755,14 +755,17 @@ overflow: hidden;
 
 /* Table of contents */
 .toc {
-  background:var(--bg-raised);
+  background: var(--bg-raised);
+
+  width: 100%;
   max-width: 720px;
 
-    border:1px solid var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
 
-    border-radius:12px;
+  padding: 0;
 
-    padding:20px;
+  margin-top: 2rem;
 }
 
 .toc > summary {
