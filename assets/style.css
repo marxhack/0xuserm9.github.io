@@ -756,6 +756,7 @@ overflow: hidden;
 /* Table of contents */
 .toc {
   background:var(--bg-raised);
+  max-width: 720px;
 
     border:1px solid var(--rule);
 
