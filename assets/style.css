@@ -749,12 +749,13 @@ overflow: hidden;
 
 /* Table of contents */
 .toc {
-  max-width: var(--measure);
-  margin: var(--sp-6) auto 0;
-  background:#101722;
-  border-radius:14px;
-  border:1px solid #2f3b4d;
-  padding: var(--sp-4);
+  background:var(--bg-raised);
+
+    border:1px solid var(--rule);
+
+    border-radius:12px;
+
+    padding:20px;
 }
 
 .toc > summary {
