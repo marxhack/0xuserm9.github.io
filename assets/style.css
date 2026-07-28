@@ -906,7 +906,7 @@ overflow: hidden;
 }
 
 .post__body strong {
-  font-weight: 600;
+  font-weight:650;
 }
 
 /* Inline code must never force a horizontal page scroll. */
@@ -963,6 +963,7 @@ overflow: hidden;
 /* Code figure */
 .code{
     background:var(--bg-code);
+    font-weight:500;
 
     border:1px solid var(--rule);
 
