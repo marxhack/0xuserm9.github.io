@@ -811,6 +811,7 @@ overflow: hidden;
 
 /* Body */
 .post__body {
+  font-weight:430;
   max-width: var(--measure);
   margin: var(--sp-7) auto 0;
   font-variant-numeric: oldstyle-nums proportional-nums;
