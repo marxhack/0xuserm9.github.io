@@ -1007,7 +1007,6 @@ overflow: hidden;
   justify-content: space-between;
   gap: var(--sp-3);
     background:var(--bg-code-bar);
-    var(--bg-code-bar);
   height:48px;  
 
     border-bottom:1px solid var(--rule);
@@ -1121,12 +1120,19 @@ overflow: hidden;
 /* Figure / image */
 .figure {
   margin-inline: 0;
+  margin:3rem 0;
 }
 
 .figure img {
   width: 100%;
   border: 1px solid var(--rule);
   background: var(--bg-raised);
+  border-radius:14px;
+  border:1px solid var(--rule);
+
+    box-shadow:
+        0 14px 40px rgba(0,0,0,.30);
+
 }
 
 .figure figcaption,
