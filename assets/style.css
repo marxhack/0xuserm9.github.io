@@ -62,20 +62,28 @@ button {
 /* --- Tokens --------------------------------------------------------------- */
 
 :root{
-  --bg:#0b0f14;
-  --bg-raised:#131922;
-  --bg-code:#0f141b;
-  --bg-code-bar:#171e28;
 
-  --rule:#2f3b4d;
-  --rule-strong:#465a74;
+--bg:#0c1117;
 
-  --text:#edf2f7;
-  --text-dim:#a3b1c2;
-  --text-faint:#738096;
+--bg-raised:#121a26;
 
-  --accent:#ffbf47;
-  --accent-deep:#ff8c42;
+--bg-code:#0f1723;
+
+--bg-code-bar:#17202d;
+
+--rule:#344255;
+
+--rule-strong:#4d617b;
+
+--text:#edf2f7;
+
+--text-dim:#b0bac9;
+
+--text-faint:#8793a5;
+
+--accent:#ffc857;
+
+--accent-deep:#f6a93b;
   --accent-underline:rgba(255,191,71,.65);
   --mark-bg:rgba(255,191,71,.12);
 
@@ -756,17 +764,14 @@ overflow: hidden;
 /* Table of contents */
 .toc {
   background: var(--bg-raised);
-  
-  /* --- Changed this line to remove the outer border --- */
-  border: none; 
-
+  border: 1px solid var(--rule);
   border-radius: 12px;
   padding: 20px;
   
-  /* (Assuming you kept the alignment fixes from earlier) */
-  max-width: 800px; 
-  margin: 0 auto;
-  box-sizing: border-box;
+  /* --- Added for Alignment --- */
+  max-width: 800px;       /* Constrains the width */
+  margin: 0 auto;         /* Centers the box horizontally */
+  box-sizing: border-box; /* Ensures padding doesn't make the box wider than max-width */
 }
 
 .toc > summary {
