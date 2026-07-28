@@ -62,31 +62,33 @@ button {
 /* --- Tokens --------------------------------------------------------------- */
 
 :root {
-  /* --- Pro Slate Backgrounds --- */
-  --bg: #0d1117;
-  --bg-raised: #161b22;
-  --bg-code: #10141b;
-  --bg-code-bar: #161b22;
+  /* --- CPTS Dark Olive Backgrounds --- */
+  --bg: #1a1f16;
+  --bg-raised: #252c1f;
+  --bg-code: #141811;
+  --bg-code-bar: #252c1f;
 
-  --rule: #30363d;
-  --rule-strong: #484f58;
+  /* --- Subtle military green borders --- */
+  --rule: #36422d;
+  --rule-strong: #4a593e;
 
-  --text: #e6edf3;
-  --text-dim: #8b949e;
-  --text-faint: #6e7681;
+  /* --- Pale green-tinted text from the badge lettering --- */
+  --text: #d6decb;
+  --text-dim: #99a888;
+  --text-faint: #738066;
 
-  /* --- Restored Yellow/Amber Accents (Matches your canvas & masthead) --- */
-  --accent: #f0b357;
-  --accent-deep: #b2603a;
-  --accent-underline: rgba(240, 179, 87, 0.7); 
-  --mark-bg: rgba(240, 179, 87, 0.14);
+  /* --- The CPTS Sword Purple for accents --- */
+  --accent: #a356db;
+  --accent-deep: #823ab5;
+  --accent-underline: rgba(163, 86, 219, 0.7);
+  --mark-bg: rgba(163, 86, 219, 0.15);
 
-  /* --- Code tokens restored to match the warm yellow --- */
-  --code-comment: #7f7c74;
-  --code-literal: #cbb488;
-  --code-flag: #e0a3a3;
+  /* --- Code Tokens --- */
+  --code-comment: #99a888;
+  --code-literal: #c5d9ad;
+  --code-flag: #ff5252; /* A little nod to the blood in the meme */
 
-  /* --- Fonts --- */
+  /* --- Fonts (Keeping your pro setup) --- */
   --font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4",
     "Source Serif Pro", Georgia, "Nimbus Roman No9 L", "Liberation Serif",
     "Times New Roman", Times, serif;
