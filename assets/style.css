@@ -62,38 +62,43 @@ button {
 /* --- Tokens --------------------------------------------------------------- */
 
 :root {
-  /* Surfaces - Deep black with slight green tints */
-  --bg: #050505;
-  --bg-raised: #0a0f0a;
-  --bg-code: #050805;
-  --bg-code-bar: #0a0f0a;
+  /* Surfaces - Deep slate blue/black for a modern IDE feel */
+  --bg: #0d1117;
+  --bg-raised: #161b22;
+  --bg-code: #10141b;
+  --bg-code-bar: #161b22;
 
-  --rule: #112211;
-  --rule-strong: #1a331a;
+  /* Subtle borders to map out structure without distracting */
+  --rule: #30363d;
+  --rule-strong: #484f58;
 
-  /* Crisp terminal off-white and dimmed greens */
-  --text: #e8f5e9;
-  --text-dim: #81c784;
-  --text-faint: #4caf50;
+  /* High-contrast cool text for long, technical reading */
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --text-faint: #6e7681;
 
-  /* Classic terminal green accent */
-  --accent: #00e676;
-  --accent-deep: #00c853;
-  --accent-underline: rgba(0, 230, 118, 0.7); 
-  --mark-bg: rgba(0, 230, 118, 0.14);
+  /* Accent - Electric Cyan (Clean, modern cybersecurity vibe) */
+  --accent: #2dd4bf;
+  --accent-deep: #0f766e;
+  --accent-underline: rgba(45, 212, 191, 0.6);
+  --mark-bg: rgba(45, 212, 191, 0.15);
 
-  /* Code tokens */
-  --code-comment: #66bb6a;
-  --code-literal: #aed581;
-  --code-flag: #ff5252;
+  /* Code tokens tailored for exploits and payloads */
+  --code-comment: #8b949e;
+  --code-literal: #a5d6ff;
+  --code-flag: #ff7b72; /* A soft red that makes CTF flags pop */
 
+  /* Pro Typography adjustments */
   --font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4",
     "Source Serif Pro", Georgia, "Nimbus Roman No9 L", "Liberation Serif",
     "Times New Roman", Times, serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", "Noto Sans", Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+  
+  /* Added modern developer fonts (JetBrains Mono / Fira Code) to the front of the stack */
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "DejaVu Sans Mono", "Liberation Mono", monospace;
+}
 
   /* Type scale: 16px root, 1.25 ratio, two steps hand-corrected. */
   --fs-micro: 0.75rem;
