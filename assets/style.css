@@ -756,14 +756,17 @@ overflow: hidden;
 /* Table of contents */
 .toc {
   background: var(--bg-raised);
-  border: 1px solid var(--rule);
+  
+  /* --- Changed this line to remove the outer border --- */
+  border: none; 
+
   border-radius: 12px;
   padding: 20px;
   
-  /* --- Added for Alignment --- */
-  max-width: 800px;       /* Constrains the width */
-  margin: 0 auto;         /* Centers the box horizontally */
-  box-sizing: border-box; /* Ensures padding doesn't make the box wider than max-width */
+  /* (Assuming you kept the alignment fixes from earlier) */
+  max-width: 800px; 
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .toc > summary {
