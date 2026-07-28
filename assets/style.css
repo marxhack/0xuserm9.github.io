@@ -175,15 +175,16 @@ body {
 
 /* Links are an underline, not a colour. */
 a {
-  color: inherit;
+  color:#ffd166;
   text-decoration: underline;
-  text-decoration-color: var(--accent-underline);
+  text-decoration-color:rgba(255,209,102,.45);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
   transition: text-decoration-color 120ms ease, color 120ms ease;
 }
 
 a:hover {
+  color:#ffe08a;
   text-decoration-color: var(--accent);
 }
 
