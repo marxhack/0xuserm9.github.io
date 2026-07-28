@@ -864,6 +864,22 @@ overflow: hidden;
 
   margin-bottom: var(--sp-2);
 }
+.post__body h2::after{
+
+    content:"";
+
+    display:block;
+
+    width:48px;
+
+    height:3px;
+
+    margin-top:12px;
+
+    background:var(--accent);
+
+    border-radius:999px;
+}
 
 .post__body h3 {
   font-size: var(--fs-h3);
