@@ -914,7 +914,9 @@ overflow: hidden;
 
 /* Aside / margin note — inline at every width. */
 .note {
-  border-left: 2px solid var(--accent);
+  background:#111722;
+  border-left:4px solid var(--accent);
+  border-radius:10px;
   padding: var(--sp-3) 0 var(--sp-3) var(--sp-4);
   font-family: var(--font-sans);
   font-size: var(--fs-meta);
@@ -936,6 +938,8 @@ overflow: hidden;
 
 /* warning / caution / danger callouts */
 .note--warn {
+  background:#221717;
+  border-left-color:#ff6b6b;
   border-left-color: var(--code-flag);
 }
 
