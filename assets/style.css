@@ -521,7 +521,7 @@ main > .section:last-child {
 .row__title {
   color: var(--text);
 
-  font-size: 1.45rem;
+  font-size: var(--fs-h2);
   line-height: 1.2;
   font-weight: 650;
   letter-spacing: -0.02em;
@@ -755,19 +755,13 @@ overflow: hidden;
 
 /* Table of contents */
 .toc {
-  background: var(--bg-raised);
-  max-width: 760px;
+  background:var(--bg-raised);
 
-  width:100%;
-  margin-top:2rem;
+    border:1px solid var(--rule);
 
-  border: 1px solid var(--rule);
+    border-radius:12px;
 
-  border-radius: 12px;
-
-  overflow: hidden;
-
-  margin-top: 2rem;
+    padding:20px;
 }
 
 .toc > summary {
