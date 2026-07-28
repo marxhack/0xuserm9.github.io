@@ -67,8 +67,8 @@ button {
   --bg-code:#0f141b;
   --bg-code-bar:#171e28;
 
-  --rule:#283241;
-  --rule-strong:#3b4b60;
+  --rule:#2f3b4d;
+  --rule-strong:#465a74;
 
   --text:#edf2f7;
   --text-dim:#a3b1c2;
@@ -892,9 +892,45 @@ overflow: hidden;
 /* Code figure */
 .code {
   margin-inline: 0;
-  border: 1px solid var(--rule);
-  background: var(--bg-code);
   position: relative;
+
+  background: var(--bg-code);
+  border: 1px solid var(--rule);
+
+  border-radius: 14px;
+  overflow: hidden;
+
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.code:hover {
+  border-color: var(--rule-strong);
+
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Left accent */
+.code::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+
+  background: linear-gradient(
+    180deg,
+    var(--accent),
+    var(--accent-deep)
+  );
 }
 
 .code__bar {
@@ -902,9 +938,19 @@ overflow: hidden;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-3);
-  background: var(--bg-code-bar);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.025),
+      rgba(255,255,255,0)
+    ),
+    var(--bg-code-bar);
+
   border-bottom: 1px solid var(--rule);
-  padding: var(--sp-2) var(--sp-3);
+
+  padding: 12px 16px;
+
   font-family: var(--font-sans);
   font-size: var(--fs-micro);
   font-size-adjust: 0.52;
@@ -915,17 +961,34 @@ overflow: hidden;
 }
 
 .code__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   font-family: var(--font-sans);
   font-size: var(--fs-micro);
+  font-size-adjust: 0.52;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 600;
+
   color: var(--text-dim);
-  border: 1px solid var(--rule-strong);
-  border-radius: 2px;
-  padding: 2px var(--sp-2);
+
+  background: rgba(255,255,255,.03);
+
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+
+  padding: 6px 10px;
+
   opacity: 0;
-  transition: opacity 120ms ease, color 120ms ease, border-color 120ms ease;
+
+  transition:
+    opacity 160ms ease,
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .code:hover .code__copy,
@@ -935,7 +998,16 @@ overflow: hidden;
 
 .code__copy:hover {
   color: var(--text);
+
+  background: rgba(255,200,87,.08);
+
   border-color: var(--accent);
+
+  transform: translateY(-1px);
+}
+
+.code__copy:active {
+  transform: translateY(0);
 }
 
 /* Touch devices have no hover state — the button must always be visible. */
