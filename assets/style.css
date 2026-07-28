@@ -734,21 +734,27 @@ overflow: hidden;
 }
 
 .cover img {
+  border-radius:14px;
+
   display: block;
   width: 100%;
   height: auto;
   /* Reserve the box before the image lands so nothing below it jumps. */
   aspect-ratio: 1200 / 630;
   object-fit: cover;
-  border: 1px solid var(--rule);
+  border:1px solid #2f3b4d;
   background: var(--bg-raised);
+  box-shadow:
+        0 12px 35px rgba(0,0,0,.35);
 }
 
 /* Table of contents */
 .toc {
   max-width: var(--measure);
   margin: var(--sp-6) auto 0;
-  border: 1px solid var(--rule);
+  background:#101722;
+  border-radius:14px;
+  border:1px solid #2f3b4d;
   padding: var(--sp-4);
 }
 
