@@ -62,45 +62,38 @@ button {
 /* --- Tokens --------------------------------------------------------------- */
 
 :root {
-  /* Surfaces - Deep slate blue/black for a modern IDE feel */
+  /* --- Surfaces & Colors --- */
   --bg: #0d1117;
   --bg-raised: #161b22;
   --bg-code: #10141b;
   --bg-code-bar: #161b22;
 
-  /* Subtle borders to map out structure without distracting */
   --rule: #30363d;
   --rule-strong: #484f58;
 
-  /* High-contrast cool text for long, technical reading */
   --text: #e6edf3;
   --text-dim: #8b949e;
   --text-faint: #6e7681;
 
-  /* Accent - Electric Cyan (Clean, modern cybersecurity vibe) */
   --accent: #2dd4bf;
   --accent-deep: #0f766e;
   --accent-underline: rgba(45, 212, 191, 0.6);
   --mark-bg: rgba(45, 212, 191, 0.15);
 
-  /* Code tokens tailored for exploits and payloads */
   --code-comment: #8b949e;
   --code-literal: #a5d6ff;
-  --code-flag: #ff7b72; /* A soft red that makes CTF flags pop */
+  --code-flag: #ff7b72;
 
-  /* Pro Typography adjustments */
+  /* --- Fonts --- */
   --font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4",
     "Source Serif Pro", Georgia, "Nimbus Roman No9 L", "Liberation Serif",
     "Times New Roman", Times, serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", "Noto Sans", Arial, sans-serif;
-  
-  /* Added modern developer fonts (JetBrains Mono / Fira Code) to the front of the stack */
   --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "DejaVu Sans Mono", "Liberation Mono", monospace;
-}
 
-  /* Type scale: 16px root, 1.25 ratio, two steps hand-corrected. */
+  /* --- Type scale (Restored) --- */
   --fs-micro: 0.75rem;
   --fs-meta: 0.875rem;
   --fs-ui: 1.0625rem;
@@ -114,7 +107,7 @@ button {
 
   --lh-body: 1.66;
 
-  /* 4px vertical rhythm. Every margin below is one of these. */
+  /* --- Spacing (Restored) --- */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -126,6 +119,7 @@ button {
   --sp-9: 96px;
   --sp-10: 128px;
 
+  /* --- Layout (Restored) --- */
   --measure: 68ch;
   --code-pad: var(--sp-4);
   --container: 1120px;
