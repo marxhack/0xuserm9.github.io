@@ -959,6 +959,9 @@ overflow: hidden;
   line-height: 1.6;
   tab-size: 2;
   color: var(--text);
+  /* Added for font ligatures */
+  font-variant-ligatures: contextual;
+  font-feature-settings: "calt" 1;
 }
 
 /* The code needs a box as wide as its longest line, otherwise a block-level
@@ -968,7 +971,6 @@ overflow: hidden;
   min-width: 100%;
   font-family: inherit;
 }
-
 /* Authored emphasis instead of syntax colouring. Bleeds to the figure's
    inner edge by cancelling the pre's own inline padding. */
 .code mark {
