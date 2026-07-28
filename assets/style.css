@@ -1452,6 +1452,7 @@ overflow: hidden;
   body {
     background: #fff;
     color: #000;
+    font-weight:400;
   }
 
   /* Code and highlight fills carry meaning, so keep them when the browser's
