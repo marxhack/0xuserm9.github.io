@@ -514,7 +514,7 @@ main > .section:last-child {
   font-size: var(--fs-meta);
   font-size-adjust: 0.52;
   font-variant-numeric: tabular-nums lining-nums;
-  color: var(--text-faint);
+  color: var(--text);
   margin-bottom: var(--sp-2);
 }
 
