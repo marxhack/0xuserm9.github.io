@@ -986,12 +986,13 @@ overflow: hidden;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-3);
-  background:#151d29
+    background:var(--bg-code-bar);
     var(--bg-code-bar);
+  height:48px;  
 
-  border-bottom: 1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
 
-  padding: 12px 16px;
+    padding:0 16px;
 
   font-family: var(--font-sans);
   font-size: var(--fs-micro);
