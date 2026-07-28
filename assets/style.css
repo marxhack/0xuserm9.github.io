@@ -972,8 +972,14 @@ overflow: hidden;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-3);
-  background:#151d29
-  var(--bg-code-bar);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.025),
+      rgba(255,255,255,0)
+    ),
+    var(--bg-code-bar);
 
   border-bottom: 1px solid var(--rule);
 
