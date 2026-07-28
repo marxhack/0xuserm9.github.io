@@ -62,7 +62,7 @@ button {
 /* --- Tokens --------------------------------------------------------------- */
 
 :root {
-  /* --- Surfaces & Colors --- */
+  /* --- Pro Slate Backgrounds --- */
   --bg: #0d1117;
   --bg-raised: #161b22;
   --bg-code: #10141b;
@@ -75,14 +75,16 @@ button {
   --text-dim: #8b949e;
   --text-faint: #6e7681;
 
-  --accent: #2dd4bf;
-  --accent-deep: #0f766e;
-  --accent-underline: rgba(45, 212, 191, 0.6);
-  --mark-bg: rgba(45, 212, 191, 0.15);
+  /* --- Restored Yellow/Amber Accents (Matches your canvas & masthead) --- */
+  --accent: #f0b357;
+  --accent-deep: #b2603a;
+  --accent-underline: rgba(240, 179, 87, 0.7); 
+  --mark-bg: rgba(240, 179, 87, 0.14);
 
-  --code-comment: #8b949e;
-  --code-literal: #a5d6ff;
-  --code-flag: #ff7b72;
+  /* --- Code tokens restored to match the warm yellow --- */
+  --code-comment: #7f7c74;
+  --code-literal: #cbb488;
+  --code-flag: #e0a3a3;
 
   /* --- Fonts --- */
   --font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4",
@@ -93,7 +95,7 @@ button {
   --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "DejaVu Sans Mono", "Liberation Mono", monospace;
 
-  /* --- Type scale (Restored) --- */
+  /* --- Type scale --- */
   --fs-micro: 0.75rem;
   --fs-meta: 0.875rem;
   --fs-ui: 1.0625rem;
@@ -107,7 +109,7 @@ button {
 
   --lh-body: 1.66;
 
-  /* --- Spacing (Restored) --- */
+  /* --- Spacing --- */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -119,7 +121,7 @@ button {
   --sp-9: 96px;
   --sp-10: 128px;
 
-  /* --- Layout (Restored) --- */
+  /* --- Layout --- */
   --measure: 68ch;
   --code-pad: var(--sp-4);
   --container: 1120px;
@@ -129,7 +131,6 @@ button {
 
   color-scheme: dark;
 }
-
 /* --- Base ----------------------------------------------------------------- */
 
 /* The ground lives on <html> and body is transparent, so the fixed
