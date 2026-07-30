@@ -140,7 +140,6 @@ If we could generate a token containing
 
 the authorization check would succeed.
 
----
 
 ## The Critical Discovery
 
@@ -178,7 +177,7 @@ Normally, that's true.
 
 The problem was that the application **trusted any correctly decrypted JWE**, confusing confidentiality with authenticity.
 
----
+
 
 ## Forging an Administrator Token
 
@@ -239,23 +238,5 @@ utflag{s0m3_c00k1es_@re_t@st13r_th@n_0th3rs}
 ```
 
 Mission accomplished.
-
----
-
-# Takeaways
-
-This challenge demonstrates a surprisingly common misconception surrounding encrypted tokens.
-
-A **JWE only provides confidentiality**.
-
-It does **not** provide authenticity.
-
-If an application accepts *any* decryptable token as trustworthy, anyone with access to the public key can manufacture arbitrary tokens.
-
-Proper authentication should rely on **signed JWTs (JWS)** or another mechanism that cryptographically verifies the token's origin—not merely its ability to decrypt.
-
-A single exposed public key transformed what should have been a secure authentication mechanism into a complete privilege escalation.
-
----
 
 Happy Hacking 🏴‍☠️

@@ -89,7 +89,7 @@
           <p class="post__dek">Exploiting a JWE implementation flaw caused by an exposed RSA public key to forge administrator tokens.</p>
           <p class="post__meta">
             <time datetime="2026-03-15">15 March 2026</time>
-            <span>4 min read</span>
+            <span>3 min read</span>
             <span>CTF · Web Security · JWE · Cryptography</span>
           </p>
         </header>
@@ -273,7 +273,6 @@ BASE64URL(authentication_tag)
 </code></pre>
           </figure>
           <p>the authorization check would succeed.</p>
-          <hr />
           <h2 id="the-critical-discovery"><span class="num">06</span>The Critical Discovery</h2>
           <p>Directory enumeration eventually uncovered an indexed <code>/resources/</code> directory.</p>
           <figure class="code">
@@ -311,7 +310,6 @@ OQIDAQAB
           <p>Most developers consider leaking a public key harmless.</p>
           <p>Normally, that's true.</p>
           <p>The problem was that the application <strong>trusted any correctly decrypted JWE</strong>, confusing confidentiality with authenticity.</p>
-          <hr />
           <h2 id="forging-an-administrator-token"><span class="num">07</span>Forging an Administrator Token</h2>
           <p>Using the leaked public key, we can simply encrypt our own payload.</p>
           <figure class="code">
@@ -380,15 +378,6 @@ utflag{s0m3_c00k1es_@re_t@st13r_th@n_0th3rs}
 </code></pre>
           </figure>
           <p>Mission accomplished.</p>
-          <hr />
-          <h1 id="takeaways">Takeaways</h1>
-          <p>This challenge demonstrates a surprisingly common misconception surrounding encrypted tokens.</p>
-          <p>A <strong>JWE only provides confidentiality</strong>.</p>
-          <p>It does <strong>not</strong> provide authenticity.</p>
-          <p>If an application accepts <em>any</em> decryptable token as trustworthy, anyone with access to the public key can manufacture arbitrary tokens.</p>
-          <p>Proper authentication should rely on <strong>signed JWTs (JWS)</strong> or another mechanism that cryptographically verifies the token's origin—not merely its ability to decrypt.</p>
-          <p>A single exposed public key transformed what should have been a secure authentication mechanism into a complete privilege escalation.</p>
-          <hr />
           <p>Happy Hacking 🏴‍☠️</p>
         </div>
 
