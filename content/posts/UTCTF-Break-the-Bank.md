@@ -140,6 +140,7 @@ If we could generate a token containing
 
 the authorization check would succeed.
 
+---
 
 ## The Critical Discovery
 
@@ -177,7 +178,7 @@ Normally, that's true.
 
 The problem was that the application **trusted any correctly decrypted JWE**, confusing confidentiality with authenticity.
 
-
+---
 
 ## Forging an Administrator Token
 
@@ -238,5 +239,7 @@ utflag{s0m3_c00k1es_@re_t@st13r_th@n_0th3rs}
 ```
 
 Mission accomplished.
+
+---
 
 Happy Hacking 🏴‍☠️

@@ -273,6 +273,7 @@ BASE64URL(authentication_tag)
 </code></pre>
           </figure>
           <p>the authorization check would succeed.</p>
+          <hr />
           <h2 id="the-critical-discovery"><span class="num">06</span>The Critical Discovery</h2>
           <p>Directory enumeration eventually uncovered an indexed <code>/resources/</code> directory.</p>
           <figure class="code">
@@ -310,6 +311,7 @@ OQIDAQAB
           <p>Most developers consider leaking a public key harmless.</p>
           <p>Normally, that's true.</p>
           <p>The problem was that the application <strong>trusted any correctly decrypted JWE</strong>, confusing confidentiality with authenticity.</p>
+          <hr />
           <h2 id="forging-an-administrator-token"><span class="num">07</span>Forging an Administrator Token</h2>
           <p>Using the leaked public key, we can simply encrypt our own payload.</p>
           <figure class="code">
@@ -378,6 +380,7 @@ utflag{s0m3_c00k1es_@re_t@st13r_th@n_0th3rs}
 </code></pre>
           </figure>
           <p>Mission accomplished.</p>
+          <hr />
           <p>Happy Hacking 🏴‍☠️</p>
         </div>
 
