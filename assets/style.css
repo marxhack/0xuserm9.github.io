@@ -101,11 +101,11 @@ button {
     "DejaVu Sans Mono", "Liberation Mono", monospace;
 
   /* --- Type scale --- */
-  --fs-micro: 0.75rem;
-  --fs-meta: 0.875rem;
-  --fs-ui: 1.0625rem;
-  --fs-body: 1.0625rem;
-  --fs-code: 0.84375rem;
+  --fs-micro: 0.8125rem;
+  --fs-meta: 0.9375rem;
+  --fs-ui: 1.125rem;
+  --fs-body: 1.125rem;
+  --fs-code: 0.9375rem;
   --fs-h4: 1.375rem;
   --fs-h3: 1.5rem;
   --fs-h2: 1.625rem;
@@ -1132,6 +1132,13 @@ overflow: hidden;
 .tk-s { color: var(--code-literal); }
 .tk-f { color: var(--code-flag); }
 
+/* Extended palette for auto syntax highlighting (see highlight.js snippet) */
+.tk-k { color: #ff9d5c; }              /* keywords: def, import, if, POST... */
+.tk-n { color: #79c0ff; }              /* numbers */
+.tk-fn { color: #d2a8ff; }             /* function / method names */
+.tk-p { color: var(--text-faint); }    /* punctuation: braces, colons */
+.tk-t { color: #7ee787; }              /* types / classes */
+
 /* Figure / image */
 .figure {
   margin-inline: 0;
@@ -1309,8 +1316,8 @@ overflow: hidden;
 @media (min-width: 600px) {
   :root {
     --pad: 32px;
-    --fs-body: 1.125rem;
-    --fs-code: 0.875rem;
+    --fs-body: 1.1875rem;
+    --fs-code: 0.9375rem;
     --fs-h1: 2.375rem;
     --fs-h2: 1.875rem;
     --fs-h3: 1.625rem;
@@ -1361,8 +1368,8 @@ overflow: hidden;
   :root {
     --pad: 48px;
     --rail-h: 60px;
-    --fs-body: 1.1875rem;
-    --fs-code: 0.9375rem;
+    --fs-body: 1.25rem;
+    --fs-code: 1rem;
     --fs-h1: 2.75rem;
     --fs-h2: 2.125rem;
     --fs-h3: 1.6875rem;
