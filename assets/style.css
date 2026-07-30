@@ -766,8 +766,8 @@ overflow: hidden;
   background: var(--bg-raised);
   border: 1px solid var(--rule);
   border-radius: 12px;
-  padding: var(--sp-5) var(--sp-5);
-
+  padding: 20px;
+  
   /* --- Added for Alignment --- */
   max-width: 800px;       /* Constrains the width */
   margin: 0 auto;         /* Centers the box horizontally */
@@ -777,13 +777,12 @@ overflow: hidden;
 .toc > summary {
   cursor: pointer;
   font-family: var(--font-sans);
-  font-size: var(--fs-meta);
+  font-size: var(--fs-micro);
   font-size-adjust: 0.52;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--text-faint);
-  line-height: 1.4;
 }
 
 .toc ol {
@@ -1385,10 +1384,6 @@ overflow: hidden;
 
   .section {
     padding-block: var(--sp-8);
-  }
-
-  .toc {
-    padding: var(--sp-6);
   }
 
   /* Code and tables hang 24px outside the measure so their optical left edge
